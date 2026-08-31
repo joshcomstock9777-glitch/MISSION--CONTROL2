@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Moonshadow Mission Control</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div>
+      <div class="brand">Moonshadow Studio</div>
+      <h1>Mission Control</h1>
+    </div>
+    <div class="meta" id="stamp">loading…</div>
+  </header>
+  <main class="grid">
+    <section class="panel">
+      <h2>Crew</h2>
+      <div id="crew"></div>
+    </section>
+    <section class="panel">
+      <h2>Missions</h2>
+      <div id="missions"></div>
+      <form id="mission-form">
+        <input id="title" placeholder="New mission title" />
+        <select id="owner"></select>
+        <select id="status">
+          <option>ASSIGNED</option>
+          <option>ACTIVE</option>
+          <option>BLOCKED</option>
+          <option>READY FOR REVIEW</option>
+        </select>
+        <button type="submit">Add mission</button>
+      </form>
+    </section>
+    <section class="panel">
+      <h2>Systems</h2>
+      <div id="systems"></div>
+      <h2 style="margin-top:18px">Sister repos</h2>
+      <div id="repos"></div>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
