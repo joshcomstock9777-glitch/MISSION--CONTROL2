@@ -3,6 +3,7 @@
   "updatedBy": "Mission Control bootstrap",
   "architect": "Josh",
   "custodian": "Amber",
+  "events": [],
   "sisterRepos": [
     {
       "name": "studio-behind-the-cast",

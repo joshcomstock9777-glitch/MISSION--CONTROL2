@@ -25,3 +25,17 @@
 
 **Blocker**
 - None.
+
+## 2026-08-31 — Activity log panel
+
+**Shipped**
+- `events` array on state (seeded empty); capped at 100 newest.
+- Server appends events on mission create/update and crew presence/status PATCH.
+- `GET /api/events` and `POST /api/events` for read/manual note.
+- Dashboard Activity panel (full-width) lists recent events with time, type, message, actor.
+
+**Next**
+- D. Read-only Brain snapshot page that fetches and displays a summary of studio-behind-the-cast/STUDIO_BRAIN.md (no rewrite of the Brain).
+
+**Blocker**
+- None.

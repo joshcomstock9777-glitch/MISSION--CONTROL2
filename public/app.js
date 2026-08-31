@@ -9,6 +9,15 @@ function tone(value) {
 function pill(text) {
   return `<span class="pill ${tone(text)}">${text}</span>`;
 }
+function fmtTime(iso) {
+  if (!iso) return "";
+  try {
+    const d = new Date(iso);
+    return d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+  } catch {
+    return iso;
+  }
+}
 const PRESENCE = ["ONLINE", "STANDBY", "OFFLINE"];
 const MISSION_STATUSES = ["ASSIGNED", "ACTIVE", "READY FOR REVIEW", "COMPLETE", "BLOCKED"];
 async function setPresence(id, presence) {
@@ -94,6 +103,21 @@ async function load() {
       ${pill(r.status)}
     </div>
   `).join("");
+  const events = state.events || [];
+  if (!events.length) {
+    $("events").innerHTML = `<div class="empty">No activity yet. Change crew presence or mission status to log events.</div>`;
+  } else {
+    $("events").innerHTML = events.slice(0, 40).map((e) => `
+      <div class="event-row">
+        <div class="event-time">${fmtTime(e.at)}</div>
+        <div class="event-body">
+          <span class="event-type">${e.type || "note"}</span>
+          <span class="event-msg">${e.message || ""}</span>
+          ${e.by ? `<span class="event-by">· ${e.by}</span>` : ""}
+        </div>
+      </div>
+    `).join("");
+  }
   $("owner").innerHTML = state.crew.map((c) => `<option value="${c.name}">${c.name}</option>`).join("");
 }
 $("mission-form").addEventListener("submit", async (e) => {

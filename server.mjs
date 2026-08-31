@@ -19,8 +19,22 @@ function loadState() {
 
 function saveState(state) {
   state.updatedAt = new Date().toISOString();
+  if (!Array.isArray(state.events)) state.events = [];
   fs.writeFileSync(STATE, JSON.stringify(state, null, 2));
   return state;
+}
+
+function pushEvent(state, type, message, meta = {}) {
+  if (!Array.isArray(state.events)) state.events = [];
+  state.events.unshift({
+    id: `EVT-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    at: new Date().toISOString(),
+    type,
+    message,
+    ...meta,
+  });
+  // keep last 100
+  if (state.events.length > 100) state.events.length = 100;
 }
 
 function json(res, code, body) {
@@ -90,6 +104,21 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, loadState());
     }
 
+    if (url.pathname === "/api/events" && req.method === "GET") {
+      const state = loadState();
+      return json(res, 200, { events: state.events || [] });
+    }
+
+    if (url.pathname === "/api/events" && req.method === "POST") {
+      const body = await readBody(req);
+      const state = loadState();
+      pushEvent(state, body.type || "note", body.message || "(empty)", {
+        by: body.updatedBy || body.by || "operator",
+      });
+      state.updatedBy = body.updatedBy || body.by || "operator";
+      return json(res, 201, saveState(state));
+    }
+
     if (url.pathname === "/api/missions" && req.method === "POST") {
       const body = await readBody(req);
       const state = loadState();
@@ -102,6 +131,10 @@ const server = http.createServer(async (req, res) => {
       };
       state.missions.unshift(mission);
       state.updatedBy = body.updatedBy || "operator";
+      pushEvent(state, "mission.create", `Created ${mission.id}: ${mission.title}`, {
+        missionId: mission.id,
+        by: state.updatedBy,
+      });
       return json(res, 201, saveState(state));
     }
 
@@ -111,11 +144,21 @@ const server = http.createServer(async (req, res) => {
       const state = loadState();
       const mission = state.missions.find((m) => m.id === id);
       if (!mission) return json(res, 404, { error: "mission not found" });
+      const before = { status: mission.status, evidence: mission.evidence, owner: mission.owner, title: mission.title };
       if (body.status) mission.status = body.status;
       if (body.evidence) mission.evidence = body.evidence;
       if (body.owner) mission.owner = body.owner;
       if (body.title) mission.title = body.title;
       state.updatedBy = body.updatedBy || "operator";
+      const parts = [];
+      if (body.status && body.status !== before.status) parts.push(`status ${before.status} → ${body.status}`);
+      if (body.evidence && body.evidence !== before.evidence) parts.push(`evidence updated`);
+      if (body.owner && body.owner !== before.owner) parts.push(`owner → ${body.owner}`);
+      if (body.title && body.title !== before.title) parts.push(`title updated`);
+      pushEvent(state, "mission.update", `${id}: ${parts.join("; ") || "touched"}`, {
+        missionId: id,
+        by: state.updatedBy,
+      });
       return json(res, 200, saveState(state));
     }
 
@@ -125,9 +168,22 @@ const server = http.createServer(async (req, res) => {
       const state = loadState();
       const person = state.crew.find((c) => c.id === id);
       if (!person) return json(res, 404, { error: "crew not found" });
+      const beforePresence = person.presence;
+      const beforeStatus = person.status;
       if (body.presence) person.presence = body.presence;
       if (body.status) person.status = body.status;
       state.updatedBy = body.updatedBy || "operator";
+      const parts = [];
+      if (body.presence && body.presence !== beforePresence) {
+        parts.push(`presence ${beforePresence} → ${body.presence}`);
+      }
+      if (body.status && body.status !== beforeStatus) {
+        parts.push(`status → ${body.status}`);
+      }
+      pushEvent(state, "crew.update", `${person.name}: ${parts.join("; ") || "touched"}`, {
+        crewId: id,
+        by: state.updatedBy,
+      });
       return json(res, 200, saveState(state));
     }
 
