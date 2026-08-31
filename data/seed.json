@@ -1,0 +1,59 @@
+{
+  "updatedAt": "2026-08-31T12:30:00-04:00",
+  "updatedBy": "Mission Control bootstrap",
+  "architect": "Josh",
+  "custodian": "Amber",
+  "sisterRepos": [
+    {
+      "name": "studio-behind-the-cast",
+      "role": "Studio Brain / PATH / memory",
+      "url": "https://github.com/joshcomstock9777-glitch/studio-behind-the-cast",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "moonshadow-studio-go",
+      "role": "Mobile creative room",
+      "url": "https://github.com/joshcomstock9777-glitch/moonshadow-studio-go",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "Moon-Shadow-studios",
+      "role": "Legacy placeholder — not source of truth",
+      "url": "https://github.com/joshcomstock9777-glitch/Moon-Shadow-studios",
+      "status": "NOT SOURCE OF TRUTH"
+    },
+    {
+      "name": "Big-City-",
+      "role": "Hybrid workflow proof",
+      "url": "https://github.com/joshcomstock9777-glitch/Big-City-",
+      "status": "POC"
+    }
+  ],
+  "crew": [
+    {"id": "josh", "name": "Josh", "role": "Architect", "lane": "Final creative authority, identity, vision, taste, approval", "status": "VERIFIED", "presence": "ONLINE"},
+    {"id": "amber", "name": "Amber", "role": "Studio Manager", "lane": "Operations, assignments, verification, Brain, handoffs", "status": "VERIFIED", "presence": "STANDBY"},
+    {"id": "allie", "name": "Allie 2.0", "role": "Primary Creative Partner", "lane": "Creative partnership and workbench", "status": "REPORTED ACTIVE", "presence": "STANDBY"},
+    {"id": "tigera", "name": "Tigera", "role": "Social Showrunner", "lane": "Social strategy, hooks, captions, community", "status": "VERIFIED CHECK-IN", "presence": "OFFLINE"},
+    {"id": "slick", "name": "Slick", "role": "Infrastructure / Publisher", "lane": "Account readiness, packaging, release gate", "status": "VERIFIED ACTIVE", "presence": "OFFLINE"},
+    {"id": "artisa", "name": "Artisa", "role": "Master Visual Editor", "lane": "Fine cuts, pacing, continuity, visual masters", "status": "VERIFIED CHECK-IN", "presence": "OFFLINE"},
+    {"id": "scout", "name": "The Scout", "role": "Resource Acquisition", "lane": "Tools, terms, limits, privacy, expiration", "status": "REPORTED", "presence": "OFFLINE"},
+    {"id": "role", "name": "Role / Erole", "role": "Audio Specialist", "lane": "Audio treatment, music, voice, mix", "status": "NAME PENDING VERIFICATION", "presence": "OFFLINE"}
+  ],
+  "systems": [
+    {"id": "brain", "name": "Studio Brain", "status": "PERSISTENT MEMORY ACTIVE", "home": "studio-behind-the-cast/STUDIO_BRAIN.md"},
+    {"id": "bridge", "name": "Bridge V1", "status": "TRANSPORT PROVEN — WORKER DOORWAYS UNVERIFIED", "home": "studio-behind-the-cast/quick-path"},
+    {"id": "studio-go", "name": "Studio Go", "status": "FOUNDATION + CORE SHELL", "home": "moonshadow-studio-go"},
+    {"id": "workbench", "name": "Workbench", "status": "LOCATION UNKNOWN — RECOVERY REQUIRED", "home": "UNKNOWN"},
+    {"id": "taskbook", "name": "Task Book", "status": "THIS REPO — INITIAL SEED", "home": "MISSION--CONTROL2"},
+    {"id": "replit-mc", "name": "Replit Mission-Control", "status": "LINK 404 / PRIVATE", "home": "replit.com/@joshcomstockndj/Mission-Control"}
+  ],
+  "missions": [
+    {"id": "MC-001", "owner": "Josh", "title": "Stand up Mission Control as operator layer", "status": "ACTIVE", "evidence": "This repository + local dashboard"},
+    {"id": "SLI-001", "owner": "Slick", "title": "Read-only infrastructure and publishing-readiness audit", "status": "ACTIVE", "evidence": "Platform-by-platform evidence and official sources"},
+    {"id": "SLI-002", "owner": "Slick", "title": "Verify GitHub repository, branch, Brain path, and access", "status": "ASSIGNED", "evidence": "Remote read test of STUDIO_BRAIN.md"},
+    {"id": "TIG-001", "owner": "Tigera", "title": "Cock Dracula / Everyday Vampire launch plan", "status": "ASSIGNED", "evidence": "3 series, 5 hooks, 7-day schedule, 10 replies"},
+    {"id": "CD-001", "owner": "Artisa", "title": "Identify Cock Dracula source files, durations, and best takes", "status": "ASSIGNED", "evidence": "Source-media manifest"},
+    {"id": "AUDIO-001", "owner": "Role / Erole", "title": "Audio-role check-in and capability audit", "status": "BLOCKED", "evidence": "Exact displayed name and verified check-in"},
+    {"id": "BRAIN-001", "owner": "Amber", "title": "Establish canonical GitHub Studio Brain", "status": "COMPLETE", "evidence": "STUDIO_BRAIN.md on main"}
+  ]
+}
