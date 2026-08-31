@@ -8,6 +8,7 @@ const PORT = Number(process.env.PORT || 3030);
 const DATA = path.join(__dirname, "data");
 const STATE = path.join(DATA, "state.json");
 const SEED = path.join(DATA, "seed.json");
+const HANDOFFS = path.join(DATA, "handoffs.json");
 const PUBLIC = path.join(__dirname, "public");
 
 function loadState() {
@@ -22,6 +23,23 @@ function saveState(state) {
   if (!Array.isArray(state.events)) state.events = [];
   fs.writeFileSync(STATE, JSON.stringify(state, null, 2));
   return state;
+}
+
+function loadHandoffs() {
+  if (fs.existsSync(HANDOFFS)) {
+    const raw = JSON.parse(fs.readFileSync(HANDOFFS, "utf8"));
+    return Array.isArray(raw.handoffs) ? raw : { handoffs: Array.isArray(raw) ? raw : [] };
+  }
+  const empty = { handoffs: [] };
+  fs.writeFileSync(HANDOFFS, JSON.stringify(empty, null, 2));
+  return empty;
+}
+
+function saveHandoffs(store) {
+  if (!Array.isArray(store.handoffs)) store.handoffs = [];
+  store.updatedAt = new Date().toISOString();
+  fs.writeFileSync(HANDOFFS, JSON.stringify(store, null, 2));
+  return store;
 }
 
 function pushEvent(state, type, message, meta = {}) {
@@ -128,7 +146,7 @@ function brainSnapshot() {
     notes: [
       "Do not merge Amber and Allie.",
       "Platform matrix (IG, FB, Threads, TikTok, YT, X) remains largely UNKNOWN — verify capability by capability.",
-      "Handoff template lives in the Brain; Mission Control will add a matching form in a later slice.",
+      "Handoff form on Mission Control matches the Brain template; saves to data/handoffs.json (does not auto-write the Brain).",
       "Sister systems: studio-behind-the-cast (Brain), moonshadow-studio-go (mobile creative room). Mission Control does not replace them.",
     ],
   };
@@ -168,6 +186,52 @@ const server = http.createServer(async (req, res) => {
       });
       state.updatedBy = body.updatedBy || body.by || "operator";
       return json(res, 201, saveState(state));
+    }
+
+    if (url.pathname === "/api/handoffs" && req.method === "GET") {
+      return json(res, 200, loadHandoffs());
+    }
+
+    if (url.pathname === "/api/handoffs" && req.method === "POST") {
+      const body = await readBody(req);
+      const store = loadHandoffs();
+      const name = String(body.name || "").trim();
+      const assignmentId = String(body.assignmentId || "").trim();
+      if (!name || !assignmentId) {
+        return json(res, 400, { error: "name and assignmentId are required" });
+      }
+      const handoff = {
+        id: `HO-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        at: body.at || new Date().toISOString(),
+        name,
+        assignmentId,
+        status: String(body.status || "").trim() || "REPORTED",
+        completed: String(body.completed || "").trim(),
+        evidence: String(body.evidence || "").trim(),
+        tools: String(body.tools || "").trim(),
+        verified: String(body.verified || "").trim(),
+        remains: String(body.remains || "").trim(),
+        blockers: String(body.blockers || "").trim(),
+        nextAction: String(body.nextAction || "").trim(),
+        joshDecisionRequired: body.joshDecisionRequired === true || body.joshDecisionRequired === "YES",
+        joshDecisionNote: String(body.joshDecisionNote || "").trim(),
+        by: body.updatedBy || body.by || "operator-ui",
+      };
+      store.handoffs.unshift(handoff);
+      if (store.handoffs.length > 200) store.handoffs.length = 200;
+      saveHandoffs(store);
+
+      const state = loadState();
+      pushEvent(
+        state,
+        "handoff",
+        `${handoff.name} · ${handoff.assignmentId}: ${handoff.status}`,
+        { handoffId: handoff.id, by: handoff.by }
+      );
+      state.updatedBy = handoff.by;
+      saveState(state);
+
+      return json(res, 201, { handoff, handoffs: store.handoffs });
     }
 
     if (url.pathname === "/api/missions" && req.method === "POST") {

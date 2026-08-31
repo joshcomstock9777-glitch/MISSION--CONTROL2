@@ -53,3 +53,17 @@
 
 **Blocker**
 - None. Live auto-refresh of Brain would need a Josh-approved read path (no secrets in this repo).
+
+## 2026-08-31 — Handoff form (Brain template)
+
+**Shipped**
+- `GET/POST /api/handoffs` — persists to `data/handoffs.json` (capped 200).
+- Dashboard Handoff panel: form fields match Brain template (name, assignment ID, status, completed, evidence, tools, verified, remains, blockers, next action, Josh decision YES/NO + note).
+- Recent handoffs list; each save also logs an activity event.
+- Does **not** write or append to STUDIO_BRAIN.md (canonical Brain stays separate).
+
+**Next**
+- F. Mobile polish for the dashboard (Josh is on Android).
+
+**Blocker**
+- None. Promoting a handoff into the Brain still requires a Josh-approved write path / human paste.

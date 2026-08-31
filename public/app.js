@@ -18,6 +18,13 @@ function fmtTime(iso) {
     return iso;
   }
 }
+function esc(s) {
+  return String(s || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
 const PRESENCE = ["ONLINE", "STANDBY", "OFFLINE"];
 const MISSION_STATUSES = ["ASSIGNED", "ACTIVE", "READY FOR REVIEW", "COMPLETE", "BLOCKED"];
 async function setPresence(id, presence) {
@@ -35,6 +42,34 @@ async function setMissionStatus(id, status) {
     body: JSON.stringify({ status, updatedBy: "operator-ui" }),
   });
   load();
+}
+async function loadHandoffs() {
+  try {
+    const res = await fetch("/api/handoffs");
+    const data = await res.json();
+    const list = data.handoffs || [];
+    if (!list.length) {
+      $("handoffs").innerHTML = `<div class="empty">No handoffs yet. Use the form above when stopping work.</div>`;
+      return;
+    }
+    $("handoffs").innerHTML = list.slice(0, 20).map((h) => `
+      <div class="handoff-card">
+        <div class="handoff-head">
+          <span class="name">${esc(h.name)} · ${esc(h.assignmentId)}</span>
+          ${pill(h.status)}
+          <span class="event-time">${fmtTime(h.at)}</span>
+        </div>
+        ${h.completed ? `<div class="lane"><strong>Completed:</strong> ${esc(h.completed)}</div>` : ""}
+        ${h.evidence ? `<div class="lane"><strong>Evidence:</strong> ${esc(h.evidence)}</div>` : ""}
+        ${h.remains ? `<div class="lane"><strong>Remains:</strong> ${esc(h.remains)}</div>` : ""}
+        ${h.blockers ? `<div class="lane"><strong>Blockers:</strong> ${esc(h.blockers)}</div>` : ""}
+        ${h.nextAction ? `<div class="lane"><strong>Next:</strong> ${esc(h.nextAction)}</div>` : ""}
+        ${h.joshDecisionRequired ? `<div class="lane josh-flag">JOSH DECISION REQUIRED${h.joshDecisionNote ? ": " + esc(h.joshDecisionNote) : ""}</div>` : ""}
+      </div>
+    `).join("");
+  } catch (err) {
+    $("handoffs").innerHTML = `<div class="empty">Handoffs load failed: ${esc(err.message)}</div>`;
+  }
 }
 async function load() {
   const res = await fetch("/api/state");
@@ -119,6 +154,11 @@ async function load() {
     `).join("");
   }
   $("owner").innerHTML = state.crew.map((c) => `<option value="${c.name}">${c.name}</option>`).join("");
+  // prefill handoff name select-style from crew if empty
+  if (!$("ho-name").value && state.crew.length) {
+    // leave blank; operator fills
+  }
+  await loadHandoffs();
 }
 $("mission-form").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -136,6 +176,34 @@ $("mission-form").addEventListener("submit", async (e) => {
     }),
   });
   $("title").value = "";
+  load();
+});
+$("handoff-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const name = $("ho-name").value.trim();
+  const assignmentId = $("ho-assignment").value.trim();
+  if (!name || !assignmentId) return;
+  await fetch("/api/handoffs", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name,
+      assignmentId,
+      status: $("ho-status").value,
+      completed: $("ho-completed").value,
+      evidence: $("ho-evidence").value,
+      tools: $("ho-tools").value,
+      verified: $("ho-verified").value,
+      remains: $("ho-remains").value,
+      blockers: $("ho-blockers").value,
+      nextAction: $("ho-next").value,
+      joshDecisionRequired: $("ho-josh").checked,
+      joshDecisionNote: $("ho-josh-note").value,
+      updatedBy: "operator-ui",
+    }),
+  });
+  $("handoff-form").reset();
+  $("ho-status").value = "ACTIVE";
   load();
 });
 load().catch((err) => {

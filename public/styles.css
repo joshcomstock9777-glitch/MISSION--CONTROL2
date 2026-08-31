@@ -53,10 +53,19 @@ h1 { margin: 4px 0 0; font-size: 28px; font-weight: 650; }
 .chip.active.bad { color: var(--bad); border-color: #4d1e28; background: #1f0a10; }
 .chip.active.cyan { color: var(--cyan); border-color: #16485a; background: #0a1520; }
 form { display: grid; gap: 8px; margin-top: 12px; }
-input, select, button { background: #0a111d; color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font: inherit; }
+input, select, button, textarea {
+  background: #0a111d;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+}
+textarea { resize: vertical; min-height: 44px; }
 button { background: var(--cyan); color: #041018; font-weight: 700; cursor: pointer; }
 .link { color: var(--cyan); text-decoration: none; font-size: 12px; }
 .empty { color: var(--mute); padding: 20px 0; }
+.hint { color: var(--mute); font-size: 12px; margin: 0 0 10px; line-height: 1.4; }
 .activity-panel { grid-column: 1 / -1; min-height: 160px; }
 .events { max-height: 280px; overflow-y: auto; }
 .event-row {
@@ -79,8 +88,42 @@ button { background: var(--cyan); color: #041018; font-weight: 700; cursor: poin
 }
 .event-msg { color: var(--text); }
 .event-by { color: var(--mute); font-size: 12px; }
+.handoff-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+.handoff-form .josh-row {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--mute);
+  white-space: nowrap;
+}
+.check input { width: auto; margin: 0; }
+.handoff-card {
+  padding: 12px 0;
+  border-bottom: 1px solid #162238;
+}
+.handoff-card:last-child { border-bottom: 0; }
+.handoff-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.josh-flag { color: var(--warn); font-weight: 600; }
 @media (max-width: 600px) {
   .event-row { grid-template-columns: 1fr; gap: 2px; }
   .top { flex-direction: column; align-items: flex-start; }
   .meta { align-items: flex-start; text-align: left; }
+  .handoff-form .form-row,
+  .handoff-form .josh-row { grid-template-columns: 1fr; }
 }

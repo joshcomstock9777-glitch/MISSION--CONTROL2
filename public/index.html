@@ -47,6 +47,41 @@
       <h2>Activity</h2>
       <div id="events" class="events"></div>
     </section>
+    <section class="panel activity-panel">
+      <h2>Handoff</h2>
+      <p class="hint">Matches Brain handoff template. Saves to data/handoffs.json only — does not write STUDIO_BRAIN.md.</p>
+      <form id="handoff-form" class="handoff-form">
+        <div class="form-row">
+          <input id="ho-name" placeholder="Name" required />
+          <input id="ho-assignment" placeholder="Assignment ID (e.g. SLI-001)" required />
+          <select id="ho-status">
+            <option>ASSIGNED</option>
+            <option selected>ACTIVE</option>
+            <option>READY FOR REVIEW</option>
+            <option>COMPLETE</option>
+            <option>BLOCKED</option>
+            <option>DEFERRED</option>
+          </select>
+        </div>
+        <textarea id="ho-completed" placeholder="WHAT WAS COMPLETED" rows="2"></textarea>
+        <textarea id="ho-evidence" placeholder="EVIDENCE / FILE LOCATION" rows="2"></textarea>
+        <textarea id="ho-tools" placeholder="TOOLS USED" rows="1"></textarea>
+        <textarea id="ho-verified" placeholder="WHAT WAS VERIFIED" rows="2"></textarea>
+        <textarea id="ho-remains" placeholder="WHAT REMAINS" rows="2"></textarea>
+        <textarea id="ho-blockers" placeholder="BLOCKERS" rows="1"></textarea>
+        <textarea id="ho-next" placeholder="RECOMMENDED NEXT ACTION" rows="2"></textarea>
+        <div class="form-row josh-row">
+          <label class="check">
+            <input type="checkbox" id="ho-josh" />
+            JOSH DECISION REQUIRED
+          </label>
+          <input id="ho-josh-note" placeholder="Explain if yes" />
+        </div>
+        <button type="submit">Save handoff</button>
+      </form>
+      <h2 style="margin-top:18px">Recent handoffs</h2>
+      <div id="handoffs" class="events"></div>
+    </section>
   </main>
   <script src="/app.js"></script>
 </body>
