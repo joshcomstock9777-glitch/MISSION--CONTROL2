@@ -87,6 +87,53 @@ function serveStatic(res, urlPath) {
   res.end(fs.readFileSync(file));
 }
 
+/** Read-only summary of studio-behind-the-cast/STUDIO_BRAIN.md.
+ *  No live GitHub fetch (repo is private; no tokens stored here).
+ *  Snapshot is curated from verified Brain content; does not rewrite the Brain.
+ */
+function brainSnapshot() {
+  return {
+    snapshotAt: new Date().toISOString(),
+    disclaimer:
+      "Read-only snapshot for operator awareness. Canonical memory remains studio-behind-the-cast/STUDIO_BRAIN.md. This page does not write or replace the Brain.",
+    source: {
+      repo: "joshcomstock9777-glitch/studio-behind-the-cast",
+      path: "STUDIO_BRAIN.md",
+      branch: "main",
+      status: "ACTIVE",
+      custodian: "Amber",
+      authority: "Josh",
+      url: "https://github.com/joshcomstock9777-glitch/studio-behind-the-cast",
+    },
+    coreRule:
+      "If it is not recorded in the Studio Brain, it did not happen. Verify instead of assuming. Never store secrets. Josh approves publish, spend, delete, and external access.",
+    roster: [
+      { name: "Josh", role: "Architect", status: "VERIFIED", lane: "Final creative authority, identity, vision, taste, approval" },
+      { name: "Amber", role: "Studio Manager", status: "VERIFIED", lane: "Operations, assignments, verification, Brain, handoffs" },
+      { name: "Allie 2.0", role: "Primary Creative Partner", status: "REPORTED ACTIVE", lane: "Creative partnership and workbench" },
+      { name: "Tigera", role: "Social Showrunner", status: "VERIFIED CHECK-IN", lane: "Social strategy, hooks, captions, community" },
+      { name: "Slick", role: "Infrastructure / Publisher", status: "VERIFIED ACTIVE", lane: "Account readiness, packaging, release gate" },
+      { name: "Artisa", role: "Master Visual Editor", status: "VERIFIED CHECK-IN", lane: "Fine cuts, pacing, continuity, visual masters" },
+      { name: "The Scout", role: "Resource Acquisition", status: "REPORTED", lane: "Tools, terms, limits, privacy, expiration" },
+      { name: "Role / Erole", role: "Audio Specialist", status: "NAME PENDING VERIFICATION", lane: "Audio treatment, music, voice, mix" },
+    ],
+    assignments: [
+      { id: "SLI-001", owner: "Slick", title: "Read-only infrastructure and publishing-readiness audit", status: "ACTIVE", evidence: "Platform-by-platform evidence and official sources" },
+      { id: "SLI-002", owner: "Slick", title: "Verify GitHub repository, branch, Brain path, and access", status: "ASSIGNED", evidence: "Remote read test of STUDIO_BRAIN.md" },
+      { id: "TIG-001", owner: "Tigera", title: "Cock Dracula / Everyday Vampire launch plan", status: "ASSIGNED", evidence: "3 series, 5 hooks, 7-day schedule, 10 replies" },
+      { id: "CD-001", owner: "Artisa", title: "Identify Cock Dracula source files, durations, and best takes", status: "ASSIGNED", evidence: "Source-media manifest" },
+      { id: "AUDIO-001", owner: "Role / Erole", title: "Audio-role check-in and capability audit", status: "BLOCKED", evidence: "Exact displayed name and verified check-in" },
+      { id: "BRAIN-001", owner: "Amber", title: "Establish canonical GitHub Studio Brain", status: "COMPLETE", evidence: "STUDIO_BRAIN.md on main" },
+    ],
+    notes: [
+      "Do not merge Amber and Allie.",
+      "Platform matrix (IG, FB, Threads, TikTok, YT, X) remains largely UNKNOWN — verify capability by capability.",
+      "Handoff template lives in the Brain; Mission Control will add a matching form in a later slice.",
+      "Sister systems: studio-behind-the-cast (Brain), moonshadow-studio-go (mobile creative room). Mission Control does not replace them.",
+    ],
+  };
+}
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url || "/", `http://${req.headers.host}`);
 
@@ -102,6 +149,10 @@ const server = http.createServer(async (req, res) => {
   try {
     if (url.pathname === "/api/state" && req.method === "GET") {
       return json(res, 200, loadState());
+    }
+
+    if (url.pathname === "/api/brain-snapshot" && req.method === "GET") {
+      return json(res, 200, brainSnapshot());
     }
 
     if (url.pathname === "/api/events" && req.method === "GET") {

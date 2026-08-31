@@ -39,3 +39,17 @@
 
 **Blocker**
 - None.
+
+## 2026-08-31 — Brain snapshot page
+
+**Shipped**
+- `GET /api/brain-snapshot` returns a structured, read-only summary (roster, assignments, core rule, notes).
+- `public/brain.html` operator page; link from dashboard header.
+- No live GitHub fetch (Brain repo is private; no tokens stored). Snapshot curated from verified Brain content only.
+- Does not write or replace STUDIO_BRAIN.md.
+
+**Next**
+- E. Handoff form matching the Brain handoff template; save into data/handoffs.json via API.
+
+**Blocker**
+- None. Live auto-refresh of Brain would need a Josh-approved read path (no secrets in this repo).

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Brain Snapshot · Mission Control</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div>
+      <div class="brand">Moonshadow Studio</div>
+      <h1>Brain Snapshot</h1>
+    </div>
+    <div class="meta">
+      <a class="link" href="/">← Mission Control</a>
+      <div id="stamp">loading…</div>
+    </div>
+  </header>
+  <main class="grid brain-grid">
+    <section class="panel">
+      <h2>Source</h2>
+      <div id="source" class="empty">…</div>
+    </section>
+    <section class="panel">
+      <h2>Core rule</h2>
+      <div id="core" class="empty">…</div>
+    </section>
+    <section class="panel">
+      <h2>Roster (verified)</h2>
+      <div id="roster"></div>
+    </section>
+    <section class="panel">
+      <h2>Active assignments</h2>
+      <div id="assignments"></div>
+    </section>
+    <section class="panel activity-panel">
+      <h2>Notes</h2>
+      <div id="notes" class="empty">…</div>
+    </section>
+  </main>
+  <script>
+    function pill(text) {
+      const v = String(text || "").toUpperCase();
+      let t = "cyan";
+      if (/(COMPLETE|VERIFIED|ACTIVE|ONLINE|OK)/.test(v) && !/UNVERIFIED|NOT /.test(v)) t = "ok";
+      else if (/(BLOCKED|404|UNKNOWN|PENDING|OFFLINE)/.test(v)) t = "bad";
+      else if (/(ASSIGNED|STANDBY|REPORTED)/.test(v)) t = "warn";
+      return `<span class="pill ${t}">${text}</span>`;
+    }
+    async function load() {
+      const res = await fetch("/api/brain-snapshot");
+      const s = await res.json();
+      document.getElementById("stamp").textContent = s.snapshotAt || "";
+      document.getElementById("source").innerHTML = `
+        <div class="name">${s.source?.repo || ""}</div>
+        <div class="lane">Path: ${s.source?.path || ""} · Branch: ${s.source?.branch || ""}</div>
+        <div class="lane">Custodian: ${s.source?.custodian || ""} · Authority: ${s.source?.authority || ""}</div>
+        <div class="lane">Status: ${pill(s.source?.status || "")}</div>
+        <p style="margin-top:10px;color:var(--mute);font-size:13px">${s.disclaimer || ""}</p>
+        <a class="link" href="${s.source?.url || "#"}" target="_blank" rel="noreferrer">open Brain repo</a>
+      `;
+      document.getElementById("core").innerHTML = `<p style="margin:0;line-height:1.5">${s.coreRule || ""}</p>`;
+      document.getElementById("roster").innerHTML = (s.roster || []).map((r) => `
+        <div class="row">
+          <div>
+            <div class="name">${r.name}</div>
+            <div class="lane">${r.role} — ${r.lane}</div>
+          </div>
+          ${pill(r.status)}
+        </div>
+      `).join("") || `<div class="empty">No roster in snapshot</div>`;
+      document.getElementById("assignments").innerHTML = (s.assignments || []).map((a) => `
+        <div class="row">
+          <div>
+            <div class="name">${a.id} · ${a.title}</div>
+            <div class="lane">${a.owner} · ${a.evidence}</div>
+          </div>
+          ${pill(a.status)}
+        </div>
+      `).join("") || `<div class="empty">No assignments in snapshot</div>`;
+      document.getElementById("notes").innerHTML = `
+        <ul style="margin:0;padding-left:18px;color:var(--mute);font-size:13px;line-height:1.6">
+          ${(s.notes || []).map((n) => `<li>${n}</li>`).join("")}
+        </ul>
+      `;
+    }
+    load().catch((err) => {
+      document.getElementById("source").textContent = "Snapshot load failed: " + err.message;
+    });
+  </script>
+</body>
+</html>
