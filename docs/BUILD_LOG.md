@@ -67,3 +67,19 @@
 
 **Blocker**
 - None. Promoting a handoff into the Brain still requires a Josh-approved write path / human paste.
+
+## 2026-08-31 — Mobile polish (Android)
+
+**Shipped**
+- Safe-area insets (notch / gesture bar), `100dvh`, theme-color + mobile-web-app meta.
+- Touch targets ≥44px on chips, inputs, buttons, checkbox.
+- Inputs at 16px to avoid mobile zoom-on-focus.
+- Phone layout: single column, stacked crew/mission rows, flex-wrap chips, handoff form single-column.
+- Tap highlight suppressed; `-webkit-overflow-scrolling: touch` on activity lists.
+- Same treatment on `brain.html`.
+
+**Next**
+- Backlog A–F complete. Await Josh for new priorities (e.g. live Brain read path, publish gates, deploy target).
+
+**Blocker**
+- None for this slice. Any deploy / external account change still needs Josh.
