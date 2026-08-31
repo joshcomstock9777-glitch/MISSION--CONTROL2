@@ -9,19 +9,41 @@ function tone(value) {
 function pill(text) {
   return `<span class="pill ${tone(text)}">${text}</span>`;
 }
+const PRESENCE = ["ONLINE", "STANDBY", "OFFLINE"];
+async function setPresence(id, presence) {
+  await fetch(`/api/crew/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ presence, updatedBy: "operator-ui" }),
+  });
+  load();
+}
 async function load() {
   const res = await fetch("/api/state");
   const state = await res.json();
   $("stamp").textContent = `${state.updatedBy || "system"} · ${state.updatedAt || ""}`;
   $("crew").innerHTML = state.crew.map((c) => `
-    <div class="row">
+    <div class="row crew-row">
       <div>
         <div class="name">${c.name}</div>
         <div class="lane">${c.role} — ${c.lane}</div>
+        <div class="presence-btns">
+          ${PRESENCE.map((p) => `
+            <button
+              type="button"
+              class="chip ${c.presence === p ? "active " + tone(p) : ""}"
+              data-id="${c.id}"
+              data-presence="${p}"
+            >${p}</button>
+          `).join("")}
+        </div>
       </div>
-      <div>${pill(c.status)} ${pill(c.presence)}</div>
+      <div class="status-stack">${pill(c.status)} ${pill(c.presence)}</div>
     </div>
   `).join("");
+  $("crew").querySelectorAll("button[data-presence]").forEach((btn) => {
+    btn.addEventListener("click", () => setPresence(btn.dataset.id, btn.dataset.presence));
+  });
   $("missions").innerHTML = state.missions.map((m) => `
     <div class="row">
       <div>

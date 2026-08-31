@@ -22,6 +22,7 @@ h1 { margin: 4px 0 0; font-size: 28px; font-weight: 650; }
 .panel h2 { margin: 0 0 12px; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); }
 .row { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid #162238; }
 .row:last-child { border-bottom: 0; }
+.crew-row { align-items: flex-start; }
 .name { font-weight: 600; }
 .lane, .ev { color: var(--mute); font-size: 12px; margin-top: 3px; }
 .pill { font-size: 11px; letter-spacing: 0.04em; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--line); white-space: nowrap; height: fit-content; }
@@ -29,6 +30,24 @@ h1 { margin: 4px 0 0; font-size: 28px; font-weight: 650; }
 .warn { color: var(--warn); border-color: #4d3d16; }
 .bad { color: var(--bad); border-color: #4d1e28; }
 .cyan { color: var(--cyan); border-color: #16485a; }
+.status-stack { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+.presence-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chip {
+  background: #0a111d;
+  color: var(--mute);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  font: inherit;
+}
+.chip:hover { border-color: var(--cyan); color: var(--text); }
+.chip.active { font-weight: 700; }
+.chip.active.ok { color: var(--ok); border-color: #1e4d38; background: #0a1f16; }
+.chip.active.warn { color: var(--warn); border-color: #4d3d16; background: #1f180a; }
+.chip.active.bad { color: var(--bad); border-color: #4d1e28; background: #1f0a10; }
 form { display: grid; gap: 8px; margin-top: 12px; }
 input, select, button { background: #0a111d; color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font: inherit; }
 button { background: var(--cyan); color: #041018; font-weight: 700; cursor: pointer; }
