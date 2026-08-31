@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#070b14" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Moonshadow Mission Control</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
@@ -26,7 +29,7 @@
       <h2>Missions</h2>
       <div id="missions"></div>
       <form id="mission-form">
-        <input id="title" placeholder="New mission title" />
+        <input id="title" placeholder="New mission title" autocomplete="off" />
         <select id="owner"></select>
         <select id="status">
           <option>ASSIGNED</option>
@@ -52,8 +55,8 @@
       <p class="hint">Matches Brain handoff template. Saves to data/handoffs.json only — does not write STUDIO_BRAIN.md.</p>
       <form id="handoff-form" class="handoff-form">
         <div class="form-row">
-          <input id="ho-name" placeholder="Name" required />
-          <input id="ho-assignment" placeholder="Assignment ID (e.g. SLI-001)" required />
+          <input id="ho-name" placeholder="Name" required autocomplete="name" />
+          <input id="ho-assignment" placeholder="Assignment ID (e.g. SLI-001)" required autocomplete="off" />
           <select id="ho-status">
             <option>ASSIGNED</option>
             <option selected>ACTIVE</option>
