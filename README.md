@@ -25,7 +25,15 @@ node server.mjs
 
 Open http://localhost:3030
 
+Health: http://localhost:3030/health
+
 No install required. Node 18+.
+
+## Deploy
+
+See `docs/DEPLOY.md`. Blueprint: `render.yaml`. Container: `Dockerfile`.
+
+A public URL requires connecting this GitHub repo to a host (Render recommended). That click lives on Josh's account.
 
 ## Layout
 
@@ -38,4 +46,4 @@ docs/           operating notes
 
 ## Status
 
-Foundation. Local JSON store. Seeded with verified Brain roster and current assignment IDs.
+Operator dashboard A–F shipped. Deploy-ready. Public host not live until Render/Fly is connected.

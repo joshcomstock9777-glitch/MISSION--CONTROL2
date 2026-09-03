@@ -83,3 +83,17 @@
 
 **Blocker**
 - None for this slice. Any deploy / external account change still needs Josh.
+
+## 2026-09-03 — Deploy-ready (Josh approved publish)
+
+**Shipped**
+- `GET /health` and `GET /api/health`.
+- Server binds `0.0.0.0` so containers/hosts can reach it.
+- `Dockerfile`, `Procfile`, `render.yaml`, `docs/DEPLOY.md`.
+- No secrets added. No sister repo replaced.
+
+**Next**
+- Josh: connect this repo to Render (Blueprint) to mint the public Android URL. One click on his account.
+
+**Blocker**
+- No host API is connected here. Cannot invent a live URL. GitHub Pages cannot run the Node API.

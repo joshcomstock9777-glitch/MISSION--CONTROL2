@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: moonshadow-mission-control
+    runtime: node
+    plan: free
+    buildCommand: "true"
+    startCommand: node server.mjs
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production

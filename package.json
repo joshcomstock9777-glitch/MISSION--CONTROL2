@@ -4,6 +4,9 @@
   "private": true,
   "description": "Operator layer for Moonshadow Studio",
   "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "start": "node server.mjs",
     "dev": "node server.mjs"
