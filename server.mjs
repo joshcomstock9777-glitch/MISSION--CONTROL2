@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT || 3030);
+const HOST = process.env.HOST || "0.0.0.0";
 const DATA = path.join(__dirname, "data");
 const STATE = path.join(DATA, "state.json");
 const SEED = path.join(DATA, "seed.json");
@@ -165,6 +166,14 @@ const server = http.createServer(async (req, res) => {
   }
 
   try {
+    if ((url.pathname === "/health" || url.pathname === "/api/health") && req.method === "GET") {
+      return json(res, 200, {
+        ok: true,
+        service: "moonshadow-mission-control",
+        ts: new Date().toISOString(),
+      });
+    }
+
     if (url.pathname === "/api/state" && req.method === "GET") {
       return json(res, 200, loadState());
     }
@@ -312,6 +321,6 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
-  console.log(`Mission Control on http://localhost:${PORT}`);
+server.listen(PORT, HOST, () => {
+  console.log(`Mission Control on http://${HOST}:${PORT}`);
 });
