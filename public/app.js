@@ -43,6 +43,48 @@ async function setMissionStatus(id, status) {
   });
   load();
 }
+async function loadRoundtable() {
+  const el = $("roundtable");
+  if (!el) return;
+  try {
+    const res = await fetch("/api/roundtable");
+    const t = await res.json();
+    const c = t.counts || {};
+    const talk = (t.nextTalk || []).length
+      ? `<div class="talk-list">${t.nextTalk.map((x) => `<div class="talk-item">${esc(x)}</div>`).join("")}</div>`
+      : `<div class="empty">Board is clean. Sit down and make something.</div>`;
+    const list = (items, empty) =>
+      items && items.length
+        ? items.map((m) => `
+            <div class="row">
+              <div>
+                <div class="name">${esc(m.id || m.name)} · ${esc(m.title || m.assignmentId || m.role || "")}</div>
+                <div class="lane">${esc(m.owner || m.home || m.joshDecisionNote || m.evidence || m.presence || "")}</div>
+              </div>
+              ${pill(m.status || m.presence || "OPEN")}
+            </div>`).join("")
+        : `<div class="empty">${empty}</div>`;
+    el.innerHTML = `
+      <div class="counts">
+        ${pill(c.blocked + " blocked")}
+        ${pill(c.review + " review")}
+        ${pill(c.active + " active")}
+        ${pill(c.joshDecisions + " Josh decisions")}
+      </div>
+      ${talk}
+      <h2>Blocked</h2>
+      ${list(t.blocked, "No blocked missions.")}
+      <h2>Ready for review</h2>
+      ${list(t.readyForReview, "Nothing waiting on review.")}
+      <h2>Josh decisions</h2>
+      ${list(t.joshDecisions, "No Josh decisions queued.")}
+      <h2>Systems to verify</h2>
+      ${list(t.systemsNeedingVerify, "No unverified systems in this snapshot.")}
+    `;
+  } catch (err) {
+    el.innerHTML = `<div class="empty">Round table load failed: ${esc(err.message)}</div>`;
+  }
+}
 async function loadHandoffs() {
   try {
     const res = await fetch("/api/handoffs");
@@ -154,10 +196,7 @@ async function load() {
     `).join("");
   }
   $("owner").innerHTML = state.crew.map((c) => `<option value="${c.name}">${c.name}</option>`).join("");
-  // prefill handoff name select-style from crew if empty
-  if (!$("ho-name").value && state.crew.length) {
-    // leave blank; operator fills
-  }
+  await loadRoundtable();
   await loadHandoffs();
 }
 $("mission-form").addEventListener("submit", async (e) => {
