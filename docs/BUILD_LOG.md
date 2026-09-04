@@ -97,3 +97,17 @@
 
 **Blocker**
 - No host API is connected here. Cannot invent a live URL. GitHub Pages cannot run the Node API.
+
+## 2026-09-04 — Round table briefing
+
+**Shipped**
+- `GET /api/roundtable` rolls up blocked missions, ready-for-review, Josh-decision handoffs, offline crew, systems needing verify.
+- Dashboard Round table panel at top of the board.
+- Read-only compute. Does not write STUDIO_BRAIN.md. Amber and Allie stay separate rows.
+
+**Next**
+- Public host still needs Josh Render Blueprint click.
+- Crew can use the panel as the agenda for the room.
+
+**Blocker**
+- Same deploy blocker. No invented URL.
