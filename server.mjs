@@ -52,8 +52,44 @@ function pushEvent(state, type, message, meta = {}) {
     message,
     ...meta,
   });
-  // keep last 100
   if (state.events.length > 100) state.events.length = 100;
+}
+
+function buildRoundtable(state, handoffs) {
+  const missions = state.missions || [];
+  const blocked = missions.filter((m) => String(m.status || "").toUpperCase() === "BLOCKED");
+  const review = missions.filter((m) => String(m.status || "").toUpperCase() === "READY FOR REVIEW");
+  const active = missions.filter((m) => String(m.status || "").toUpperCase() === "ACTIVE");
+  const josh = (handoffs || []).filter((h) => h.joshDecisionRequired);
+  const offlineCrew = (state.crew || [])
+    .filter((c) => String(c.presence || "").toUpperCase() === "OFFLINE")
+    .map((c) => ({ id: c.id, name: c.name, role: c.role, presence: c.presence }));
+  const systemsNeedingVerify = (state.systems || []).filter((s) =>
+    /UNKNOWN|404|RECOVERY|UNVERIFIED/i.test(String(s.status || ""))
+  );
+  const nextTalk = [
+    blocked.length ? `${blocked.length} blocked mission(s)` : null,
+    review.length ? `${review.length} ready for review` : null,
+    josh.length ? `${josh.length} Josh decision(s) in handoffs` : null,
+    systemsNeedingVerify.length ? `${systemsNeedingVerify.length} system(s) unverified` : null,
+    offlineCrew.length ? `${offlineCrew.length} crew offline` : null,
+  ].filter(Boolean);
+  return {
+    at: new Date().toISOString(),
+    counts: {
+      blocked: blocked.length,
+      review: review.length,
+      active: active.length,
+      joshDecisions: josh.length,
+      offline: offlineCrew.length,
+    },
+    blocked,
+    readyForReview: review,
+    joshDecisions: josh.slice(0, 10),
+    offlineCrew,
+    systemsNeedingVerify,
+    nextTalk,
+  };
 }
 
 function json(res, code, body) {
@@ -106,10 +142,6 @@ function serveStatic(res, urlPath) {
   res.end(fs.readFileSync(file));
 }
 
-/** Read-only summary of studio-behind-the-cast/STUDIO_BRAIN.md.
- *  No live GitHub fetch (repo is private; no tokens stored here).
- *  Snapshot is curated from verified Brain content; does not rewrite the Brain.
- */
 function brainSnapshot() {
   return {
     snapshotAt: new Date().toISOString(),
@@ -172,6 +204,12 @@ const server = http.createServer(async (req, res) => {
         service: "moonshadow-mission-control",
         ts: new Date().toISOString(),
       });
+    }
+
+    if (url.pathname === "/api/roundtable" && req.method === "GET") {
+      const state = loadState();
+      const store = loadHandoffs();
+      return json(res, 200, buildRoundtable(state, store.handoffs || []));
     }
 
     if (url.pathname === "/api/state" && req.method === "GET") {
