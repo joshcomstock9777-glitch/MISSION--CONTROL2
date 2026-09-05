@@ -46,4 +46,4 @@ docs/           operating notes
 
 ## Status
 
-Operator dashboard A–F shipped. Deploy-ready. Public host not live until Render/Fly is connected.
+Operator dashboard A–F shipped. Live refresh, mission filter, Copy Brain MD helper shipped. Deploy-ready. Public host not live until Render/Fly is connected.
