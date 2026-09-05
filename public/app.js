@@ -6,7 +6,9 @@ const SYSTEM_STATUSES = ["ACTIVE", "OK", "UNVERIFIED", "UNKNOWN", "RECOVERY", "4
 const REFRESH_MS = 30000;
 
 let lastMissions = [];
+let lastEvents = [];
 let missionFilter = "ALL";
+let eventFilter = "ALL";
 let refreshTimer = null;
 
 function pill(text) {
@@ -233,13 +235,33 @@ function renderRepos(repos) {
     .join("");
 }
 
+function eventTypeMatch(type, filter) {
+  if (!filter || filter === "ALL") return true;
+  const t = String(type || "").toLowerCase();
+  const f = String(filter).toLowerCase();
+  if (f === "mission") return t.startsWith("mission");
+  if (f === "crew") return t.startsWith("crew");
+  if (f === "system") return t.startsWith("system");
+  if (f === "sister-repo") return t.startsWith("sister-repo") || t.startsWith("sister");
+  if (f === "handoff") return t === "handoff" || t.startsWith("handoff");
+  if (f === "note") return t === "note";
+  return t === f;
+}
+
 function renderEvents(events) {
+  lastEvents = events || [];
   const el = $("events");
-  if (!events?.length) {
-    el.innerHTML = `<div class="empty">No activity yet</div>`;
+  const filter = eventFilter || "ALL";
+  const list =
+    filter === "ALL"
+      ? lastEvents
+      : lastEvents.filter((e) => eventTypeMatch(e.type, filter));
+
+  if (!list.length) {
+    el.innerHTML = `<div class="empty">${filter === "ALL" ? "No activity yet" : "No events match filter"}</div>`;
     return;
   }
-  el.innerHTML = events
+  el.innerHTML = list
     .slice(0, 40)
     .map(
       (e) => `
@@ -450,6 +472,11 @@ function wireForms() {
   $("mission-filter")?.addEventListener("change", (e) => {
     missionFilter = e.target.value || "ALL";
     renderMissions(lastMissions);
+  });
+
+  $("event-filter")?.addEventListener("change", (e) => {
+    eventFilter = e.target.value || "ALL";
+    renderEvents(lastEvents);
   });
 }
 
