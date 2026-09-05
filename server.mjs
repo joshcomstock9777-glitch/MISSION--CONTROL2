@@ -397,6 +397,31 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, saveState(state));
     }
 
+    if (url.pathname === "/api/sweep" && req.method === "POST") {
+      const body = await readBody(req);
+      const state = loadState();
+      const store = loadHandoffs();
+      const by = body.updatedBy || body.by || "operator-ui";
+      const crew = state.crew || [];
+      const missions = state.missions || [];
+      const systems = state.systems || [];
+      const repos = state.sisterRepos || [];
+      const handoffs = store.handoffs || [];
+      pushEvent(state, "sweep.crew", crew.map((c) => `${c.name}:${c.presence || "?"}`).join(", ") || "no crew", { by });
+      pushEvent(state, "sweep.mission", missions.map((m) => `${m.id}:${m.status}`).join(", ") || "no missions", { by });
+      pushEvent(state, "sweep.system", systems.map((s) => `${s.name}:${s.status}`).join(", ") || "no systems", { by });
+      pushEvent(state, "sweep.sister-repo", repos.map((r) => `${r.name}:${r.status}`).join(", ") || "no sister repos", { by });
+      pushEvent(state, "sweep.handoff", handoffs.slice(0, 8).map((h) => `${h.assignmentId}:${h.status}`).join(", ") || "none", { by });
+      pushEvent(
+        state,
+        "sweep",
+        `Front-to-back: ${crew.length} crew, ${missions.length} missions, ${systems.length} systems, ${repos.length} sister repos, ${handoffs.length} handoffs`,
+        { by }
+      );
+      state.updatedBy = by;
+      return json(res, 200, saveState(state));
+    }
+
     if (url.pathname.startsWith("/api/")) {
       return json(res, 404, { error: "unknown api route" });
     }
