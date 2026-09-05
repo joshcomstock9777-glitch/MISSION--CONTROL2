@@ -6,6 +6,7 @@ function sisterStatusMatch(current, candidate) {
 
 function renderRepos(repos) {
   const el = $("repos");
+  if (!el) return;
   if (!repos?.length) {
     el.innerHTML = `<div class="empty">No sister repos</div>`;
     return;
@@ -70,3 +71,6 @@ function wireSweep() {
 }
 
 wireSweep();
+if (typeof refresh === "function") {
+  refresh().catch(() => {});
+}
