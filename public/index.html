@@ -32,6 +32,17 @@
     </section>
     <section class="panel">
       <h2>Missions</h2>
+      <div class="filter-row">
+        <label class="filter-label" for="mission-filter">Filter</label>
+        <select id="mission-filter">
+          <option value="ALL">All</option>
+          <option value="ASSIGNED">Assigned</option>
+          <option value="ACTIVE">Active</option>
+          <option value="READY FOR REVIEW">Ready for review</option>
+          <option value="COMPLETE">Complete</option>
+          <option value="BLOCKED">Blocked</option>
+        </select>
+      </div>
       <div id="missions"></div>
       <form id="mission-form">
         <input id="title" placeholder="New mission title" autocomplete="off" />
@@ -89,7 +100,10 @@
           </label>
           <input id="ho-josh-note" placeholder="Explain if yes" />
         </div>
-        <button type="submit">Save handoff</button>
+        <div class="form-row">
+          <button type="submit">Save handoff</button>
+          <button type="button" id="ho-copy-md" class="btn">Copy Brain MD</button>
+        </div>
       </form>
       <h2 style="margin-top:18px">Recent handoffs</h2>
       <div id="handoffs" class="events"></div>
