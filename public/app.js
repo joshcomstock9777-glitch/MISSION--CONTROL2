@@ -2,6 +2,11 @@ const $ = (id) => document.getElementById(id);
 
 const PRESENCE = ["ONLINE", "STANDBY", "OFFLINE"];
 const MISSION_STATUSES = ["ASSIGNED", "ACTIVE", "READY FOR REVIEW", "COMPLETE", "BLOCKED"];
+const REFRESH_MS = 30000;
+
+let lastMissions = [];
+let missionFilter = "ALL";
+let refreshTimer = null;
 
 function pill(text) {
   const v = String(text || "").toUpperCase();
@@ -14,10 +19,10 @@ function pill(text) {
 
 function escapeHtml(s) {
   return String(s ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/&/g, "&")
+    .replace(/</g, "<")
+    .replace(/>/g, ">")
+    .replace(/"/g, """);
 }
 
 function fmtTime(iso) {
@@ -98,12 +103,19 @@ function nextMissionStatus(current) {
 }
 
 function renderMissions(missions) {
+  lastMissions = missions || [];
   const el = $("missions");
-  if (!missions?.length) {
-    el.innerHTML = `<div class="empty">No missions</div>`;
+  const filter = missionFilter || "ALL";
+  const list =
+    filter === "ALL"
+      ? lastMissions
+      : lastMissions.filter((m) => String(m.status || "").toUpperCase() === filter);
+
+  if (!list.length) {
+    el.innerHTML = `<div class="empty">${filter === "ALL" ? "No missions" : "No missions match filter"}</div>`;
     return;
   }
-  el.innerHTML = missions
+  el.innerHTML = list
     .map(
       (m) => `
     <div class="row mission-row" data-id="${escapeHtml(m.id)}">
@@ -249,6 +261,55 @@ function fillOwnerSelect(crew) {
   sel.innerHTML = names.map((n) => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
 }
 
+function handoffToBrainMd() {
+  const name = $("ho-name")?.value.trim() || "";
+  const assignmentId = $("ho-assignment")?.value.trim() || "";
+  const status = $("ho-status")?.value || "";
+  const completed = $("ho-completed")?.value.trim() || "";
+  const evidence = $("ho-evidence")?.value.trim() || "";
+  const tools = $("ho-tools")?.value.trim() || "";
+  const verified = $("ho-verified")?.value.trim() || "";
+  const remains = $("ho-remains")?.value.trim() || "";
+  const blockers = $("ho-blockers")?.value.trim() || "";
+  const nextAction = $("ho-next")?.value.trim() || "";
+  const joshReq = $("ho-josh")?.checked ? "YES" : "NO";
+  const joshNote = $("ho-josh-note")?.value.trim() || "";
+  const at = new Date().toISOString();
+
+  return [
+    `### Handoff — ${name || "(name)"} · ${assignmentId || "(id)"}`,
+    ``,
+    `- **When:** ${at}`,
+    `- **Status:** ${status}`,
+    `- **What was completed:** ${completed || "—"}`,
+    `- **Evidence / file location:** ${evidence || "—"}`,
+    `- **Tools used:** ${tools || "—"}`,
+    `- **What was verified:** ${verified || "—"}`,
+    `- **What remains:** ${remains || "—"}`,
+    `- **Blockers:** ${blockers || "—"}`,
+    `- **Recommended next action:** ${nextAction || "—"}`,
+    `- **Josh decision required:** ${joshReq}${joshNote ? ` — ${joshNote}` : ""}`,
+    ``,
+  ].join("\n");
+}
+
+async function copyBrainMd() {
+  const md = handoffToBrainMd();
+  try {
+    await navigator.clipboard.writeText(md);
+    const btn = $("ho-copy-md");
+    if (btn) {
+      const prev = btn.textContent;
+      btn.textContent = "Copied";
+      setTimeout(() => {
+        btn.textContent = prev;
+      }, 1500);
+    }
+  } catch (err) {
+    prompt("Copy this into the Brain:", md);
+  }
+}
+
 async function refresh() {
   const [state, rt, handoffs] = await Promise.all([
     api("/api/state"),
@@ -265,6 +326,13 @@ async function refresh() {
   renderHandoffs(handoffs);
   fillOwnerSelect(state.crew);
   return state;
+}
+
+function startLiveRefresh() {
+  if (refreshTimer) clearInterval(refreshTimer);
+  refreshTimer = setInterval(() => {
+    refresh().catch(() => {});
+  }, REFRESH_MS);
 }
 
 function wireForms() {
@@ -335,10 +403,21 @@ function wireForms() {
       alert("Handoff save failed: " + err.message);
     }
   });
+
+  $("ho-copy-md")?.addEventListener("click", () => {
+    copyBrainMd();
+  });
+
+  $("mission-filter")?.addEventListener("change", (e) => {
+    missionFilter = e.target.value || "ALL";
+    renderMissions(lastMissions);
+  });
 }
 
 wireForms();
-refresh().catch((err) => {
-  $("stamp").textContent = "Load failed: " + err.message;
-  console.error(err);
-});
+refresh()
+  .then(() => startLiveRefresh())
+  .catch((err) => {
+    $("stamp").textContent = "Load failed: " + err.message;
+    console.error(err);
+  });
