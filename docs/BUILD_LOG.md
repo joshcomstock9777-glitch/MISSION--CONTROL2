@@ -1,5 +1,22 @@
 # Build Log
 
+## 2026-09-05 — Sister-repo buttons + front-to-back sweep
+
+**Shipped**
+- Sister repos now PATCH `/api/sister-repos/:name` from the dashboard (ACTIVE / UNVERIFIED / POC / NOT SOURCE OF TRUTH).
+- Front-to-back sweep button on Round table → POST `/api/sweep`.
+- Sweep writes one activity comment per board (crew → missions → systems → sister repos → handoffs) plus a summary event. Does not write the Brain. Does not start Artisa / CD-001.
+
+**Next**
+- Deploy: Josh connect Render/Fly.
+- ART / CD-001 stays parked until this operator pass is live and Josh says go. No SMS connector on this account — ping stays in-chat.
+
+**Blocker for Josh**
+- Hosting account link (Render blueprint `render.yaml` is ready).
+- Real SMS/text not available from this builder session.
+
+---
+
 ## 2026-09-05 — Event type filter
 
 **Shipped**
