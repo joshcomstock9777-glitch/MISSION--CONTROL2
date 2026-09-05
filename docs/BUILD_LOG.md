@@ -1,5 +1,19 @@
 # Build Log
 
+## 2026-09-05 — Event type filter
+
+**Shipped**
+- Activity panel: type filter (All / Note / Mission / Crew / System / Handoff / Sister repo).
+- Client-side filter on cached events; works with live refresh.
+
+**Next**
+- Deploy: connect this repo to Render/Fly (Josh click required — public URL not live).
+
+**Blocker for Josh**
+- Hosting account link (Render blueprint `render.yaml` is ready).
+
+---
+
 ## 2026-09-05 — System status buttons
 
 **Shipped**
