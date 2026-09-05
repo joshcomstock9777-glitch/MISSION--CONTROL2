@@ -125,3 +125,17 @@
 
 **Blocker**
 - Deploy still on Josh. Promoting handoff text into the Brain remains human paste (by design).
+
+## 2026-09-04 — Systems status chips + auto-refresh
+
+**Shipped**
+- `PATCH /api/systems/:id` updates system status (and optional home/name); appends activity event.
+- Systems panel rows now have status chips: ACTIVE, VERIFIED, UNVERIFIED, UNKNOWN, RECOVERY REQUIRED, 404 / PRIVATE, POC, NOT SOURCE OF TRUTH.
+- Quiet 60s auto-refresh when the tab is visible so multi-device rooms stay aligned.
+
+**Next**
+- Public host still needs Josh Render Blueprint click.
+- Optional: custom system status free-text, or sister-repo status chips.
+
+**Blocker**
+- Deploy still on Josh. No secrets. No Brain rewrite.

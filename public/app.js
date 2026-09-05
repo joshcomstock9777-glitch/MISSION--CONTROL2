@@ -68,6 +68,16 @@ async function copyText(text) {
 }
 const PRESENCE = ["ONLINE", "STANDBY", "OFFLINE"];
 const MISSION_STATUSES = ["ASSIGNED", "ACTIVE", "READY FOR REVIEW", "COMPLETE", "BLOCKED"];
+const SYSTEM_STATUSES = [
+  "ACTIVE",
+  "VERIFIED",
+  "UNVERIFIED",
+  "UNKNOWN",
+  "RECOVERY REQUIRED",
+  "404 / PRIVATE",
+  "POC",
+  "NOT SOURCE OF TRUTH",
+];
 async function setPresence(id, presence) {
   await fetch(`/api/crew/${encodeURIComponent(id)}`, {
     method: "PATCH",
@@ -78,6 +88,14 @@ async function setPresence(id, presence) {
 }
 async function setMissionStatus(id, status) {
   await fetch(`/api/missions/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status, updatedBy: "operator-ui" }),
+  });
+  load();
+}
+async function setSystemStatus(id, status) {
+  await fetch(`/api/systems/${encodeURIComponent(id)}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status, updatedBy: "operator-ui" }),
@@ -217,14 +235,27 @@ async function load() {
     btn.addEventListener("click", () => setMissionStatus(btn.dataset.id, btn.dataset.status));
   });
   $("systems").innerHTML = state.systems.map((s) => `
-    <div class="row">
+    <div class="row system-row">
       <div>
-        <div class="name">${s.name}</div>
-        <div class="lane">${s.home}</div>
+        <div class="name">${esc(s.name)}</div>
+        <div class="lane">${esc(s.home)}</div>
+        <div class="status-btns">
+          ${SYSTEM_STATUSES.map((st) => `
+            <button
+              type="button"
+              class="chip ${s.status === st ? "active " + tone(st) : ""}"
+              data-id="${esc(s.id)}"
+              data-sys-status="${esc(st)}"
+            >${esc(st)}</button>
+          `).join("")}
+        </div>
       </div>
       ${pill(s.status)}
     </div>
   `).join("");
+  $("systems").querySelectorAll("button[data-sys-status]").forEach((btn) => {
+    btn.addEventListener("click", () => setSystemStatus(btn.dataset.id, btn.dataset.sysStatus));
+  });
   $("repos").innerHTML = state.sisterRepos.map((r) => `
     <div class="row">
       <div>
@@ -319,3 +350,7 @@ $("note-form").addEventListener("submit", async (e) => {
 load().catch((err) => {
   $("missions").innerHTML = `<div class="empty">State load failed: ${err.message}. Start with node server.mjs</div>`;
 });
+// Quiet board refresh so multi-device rooms stay in sync without a full reload.
+setInterval(() => {
+  if (document.visibilityState === "visible") load().catch(() => {});
+}, 60000);

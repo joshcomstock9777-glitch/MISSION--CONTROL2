@@ -349,6 +349,30 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, saveState(state));
     }
 
+    if (url.pathname.startsWith("/api/systems/") && req.method === "PATCH") {
+      const id = decodeURIComponent(url.pathname.split("/").pop());
+      const body = await readBody(req);
+      const state = loadState();
+      const system = (state.systems || []).find((s) => s.id === id);
+      if (!system) return json(res, 404, { error: "system not found" });
+      const beforeStatus = system.status;
+      if (body.status) system.status = body.status;
+      if (body.home) system.home = body.home;
+      if (body.name) system.name = body.name;
+      state.updatedBy = body.updatedBy || "operator";
+      const parts = [];
+      if (body.status && body.status !== beforeStatus) {
+        parts.push(`status ${beforeStatus} → ${body.status}`);
+      }
+      if (body.home) parts.push("home updated");
+      if (body.name) parts.push("name updated");
+      pushEvent(state, "system.update", `${system.name}: ${parts.join("; ") || "touched"}`, {
+        systemId: id,
+        by: state.updatedBy,
+      });
+      return json(res, 200, saveState(state));
+    }
+
     if (url.pathname.startsWith("/api/")) {
       return json(res, 404, { error: "unknown api route" });
     }
