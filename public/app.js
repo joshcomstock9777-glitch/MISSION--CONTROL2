@@ -20,10 +20,10 @@ function fmtTime(iso) {
 }
 function esc(s) {
   return String(s || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/&/g, "&")
+    .replace(/</g, "<")
+    .replace(/>/g, ">")
+    .replace(/"/g, """);
 }
 function handoffToBrainMd(h) {
   const lines = [
@@ -78,6 +78,14 @@ const SYSTEM_STATUSES = [
   "POC",
   "NOT SOURCE OF TRUTH",
 ];
+const SISTER_STATUSES = [
+  "ACTIVE",
+  "VERIFIED",
+  "POC",
+  "NOT SOURCE OF TRUTH",
+  "UNKNOWN",
+  "ARCHIVED",
+];
 async function setPresence(id, presence) {
   await fetch(`/api/crew/${encodeURIComponent(id)}`, {
     method: "PATCH",
@@ -96,6 +104,14 @@ async function setMissionStatus(id, status) {
 }
 async function setSystemStatus(id, status) {
   await fetch(`/api/systems/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status, updatedBy: "operator-ui" }),
+  });
+  load();
+}
+async function setSisterStatus(name, status) {
+  await fetch(`/api/sister-repos/${encodeURIComponent(name)}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status, updatedBy: "operator-ui" }),
@@ -256,16 +272,29 @@ async function load() {
   $("systems").querySelectorAll("button[data-sys-status]").forEach((btn) => {
     btn.addEventListener("click", () => setSystemStatus(btn.dataset.id, btn.dataset.sysStatus));
   });
-  $("repos").innerHTML = state.sisterRepos.map((r) => `
-    <div class="row">
+  $("repos").innerHTML = (state.sisterRepos || []).map((r) => `
+    <div class="row system-row">
       <div>
-        <div class="name">${r.name}</div>
-        <div class="lane">${r.role}</div>
-        <a class="link" href="${r.url}" target="_blank" rel="noreferrer">open repo</a>
+        <div class="name">${esc(r.name)}</div>
+        <div class="lane">${esc(r.role)}</div>
+        <a class="link" href="${esc(r.url)}" target="_blank" rel="noreferrer">open repo</a>
+        <div class="status-btns">
+          ${SISTER_STATUSES.map((st) => `
+            <button
+              type="button"
+              class="chip ${r.status === st ? "active " + tone(st) : ""}"
+              data-name="${esc(r.name)}"
+              data-sister-status="${esc(st)}"
+            >${esc(st)}</button>
+          `).join("")}
+        </div>
       </div>
       ${pill(r.status)}
     </div>
   `).join("");
+  $("repos").querySelectorAll("button[data-sister-status]").forEach((btn) => {
+    btn.addEventListener("click", () => setSisterStatus(btn.dataset.name, btn.dataset.sisterStatus));
+  });
   const events = state.events || [];
   if (!events.length) {
     $("events").innerHTML = `<div class="empty">No activity yet. Change crew presence or mission status to log events.</div>`;
