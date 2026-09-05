@@ -111,3 +111,17 @@
 
 **Blocker**
 - Same deploy blocker. No invented URL.
+
+## 2026-09-04 — Handoff Brain-paste + activity notes
+
+**Shipped**
+- Each recent handoff has a **Copy Brain MD** chip. Builds Brain-template markdown and copies to clipboard (no write to STUDIO_BRAIN.md).
+- Activity panel: quick note form POSTs `/api/events` (type `note`).
+- Mobile: note form stacks to single column under 600px.
+
+**Next**
+- Public host still needs Josh Render Blueprint click.
+- Optional later: systems status chips, auto-refresh interval.
+
+**Blocker**
+- Deploy still on Josh. Promoting handoff text into the Brain remains human paste (by design).

@@ -134,6 +134,12 @@ h1 { margin: 4px 0 0; font-size: 28px; font-weight: 650; }
 .chip.active.bad { color: var(--bad); border-color: #4d1e28; background: #1f0a10; }
 .chip.active.cyan { color: var(--cyan); border-color: #16485a; background: #0a1520; }
 form { display: grid; gap: 8px; margin-top: 12px; }
+.note-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin: 0 0 12px;
+}
 input, select, button, textarea {
   background: #0a111d;
   color: var(--text);
@@ -292,6 +298,7 @@ button:active { opacity: 0.9; }
   .handoff-form .josh-row { grid-template-columns: 1fr; }
   .check { white-space: normal; }
   form { gap: 10px; }
+  .note-form { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 380px) {

@@ -25,6 +25,47 @@ function esc(s) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
+function handoffToBrainMd(h) {
+  const lines = [
+    `### Handoff — ${h.name || ""} · ${h.assignmentId || ""}`,
+    ``,
+    `- **Status:** ${h.status || ""}`,
+    `- **At:** ${h.at || ""}`,
+    `- **Completed:** ${h.completed || "—"}`,
+    `- **Evidence:** ${h.evidence || "—"}`,
+    `- **Tools used:** ${h.tools || "—"}`,
+    `- **Verified:** ${h.verified || "—"}`,
+    `- **Remains:** ${h.remains || "—"}`,
+    `- **Blockers:** ${h.blockers || "—"}`,
+    `- **Next action:** ${h.nextAction || "—"}`,
+    `- **Josh decision required:** ${h.joshDecisionRequired ? "YES" : "NO"}${h.joshDecisionNote ? ` — ${h.joshDecisionNote}` : ""}`,
+    `- **Logged by:** ${h.by || "operator"}`,
+    ``,
+  ];
+  return lines.join("\n");
+}
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy");
+      return true;
+    } catch {
+      return false;
+    } finally {
+      document.body.removeChild(ta);
+    }
+  }
+}
 const PRESENCE = ["ONLINE", "STANDBY", "OFFLINE"];
 const MISSION_STATUSES = ["ASSIGNED", "ACTIVE", "READY FOR REVIEW", "COMPLETE", "BLOCKED"];
 async function setPresence(id, presence) {
@@ -95,11 +136,12 @@ async function loadHandoffs() {
       return;
     }
     $("handoffs").innerHTML = list.slice(0, 20).map((h) => `
-      <div class="handoff-card">
+      <div class="handoff-card" data-id="${esc(h.id)}">
         <div class="handoff-head">
           <span class="name">${esc(h.name)} · ${esc(h.assignmentId)}</span>
           ${pill(h.status)}
           <span class="event-time">${fmtTime(h.at)}</span>
+          <button type="button" class="chip copy-md" data-id="${esc(h.id)}">Copy Brain MD</button>
         </div>
         ${h.completed ? `<div class="lane"><strong>Completed:</strong> ${esc(h.completed)}</div>` : ""}
         ${h.evidence ? `<div class="lane"><strong>Evidence:</strong> ${esc(h.evidence)}</div>` : ""}
@@ -109,6 +151,19 @@ async function loadHandoffs() {
         ${h.joshDecisionRequired ? `<div class="lane josh-flag">JOSH DECISION REQUIRED${h.joshDecisionNote ? ": " + esc(h.joshDecisionNote) : ""}</div>` : ""}
       </div>
     `).join("");
+    const byId = Object.fromEntries(list.map((h) => [h.id, h]));
+    $("handoffs").querySelectorAll("button.copy-md").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const h = byId[btn.dataset.id];
+        if (!h) return;
+        const md = handoffToBrainMd(h);
+        const ok = await copyText(md);
+        btn.textContent = ok ? "Copied" : "Copy failed";
+        setTimeout(() => {
+          btn.textContent = "Copy Brain MD";
+        }, 1600);
+      });
+    });
   } catch (err) {
     $("handoffs").innerHTML = `<div class="empty">Handoffs load failed: ${esc(err.message)}</div>`;
   }
@@ -243,6 +298,22 @@ $("handoff-form").addEventListener("submit", async (e) => {
   });
   $("handoff-form").reset();
   $("ho-status").value = "ACTIVE";
+  load();
+});
+$("note-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const message = $("note-msg").value.trim();
+  if (!message) return;
+  await fetch("/api/events", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      type: "note",
+      message,
+      updatedBy: "operator-ui",
+    }),
+  });
+  $("note-msg").value = "";
   load();
 });
 load().catch((err) => {

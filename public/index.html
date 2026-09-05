@@ -53,11 +53,15 @@
     </section>
     <section class="panel activity-panel">
       <h2>Activity</h2>
+      <form id="note-form" class="note-form">
+        <input id="note-msg" placeholder="Quick note for the activity log" autocomplete="off" />
+        <button type="submit">Log note</button>
+      </form>
       <div id="events" class="events"></div>
     </section>
     <section class="panel activity-panel">
       <h2>Handoff</h2>
-      <p class="hint">Matches Brain handoff template. Saves to data/handoffs.json only — does not write STUDIO_BRAIN.md.</p>
+      <p class="hint">Matches Brain handoff template. Saves to data/handoffs.json only — does not write STUDIO_BRAIN.md. Use Copy Brain MD to paste into the Brain yourself.</p>
       <form id="handoff-form" class="handoff-form">
         <div class="form-row">
           <input id="ho-name" placeholder="Name" required autocomplete="name" />
