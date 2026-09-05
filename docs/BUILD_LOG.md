@@ -153,3 +153,17 @@
 
 **Blocker**
 - Deploy still on Josh. No invented URL.
+
+## 2026-09-05 — Crew status chips
+
+**Shipped**
+- Crew rows now have status chips under presence: VERIFIED, REPORTED ACTIVE, VERIFIED CHECK-IN, VERIFIED ACTIVE, REPORTED, NAME PENDING VERIFICATION, UNVERIFIED.
+- Each chip PATCHes `/api/crew/:id` with `{ status }` (endpoint already supported status).
+- Active status highlighted; activity event logged on change. Amber and Allie stay separate rows.
+
+**Next**
+- Public host still needs Josh Render Blueprint click.
+- Optional: mission evidence quick-edit, free-text custom status, or Josh-approved live Brain read path (no secrets).
+
+**Blocker**
+- Deploy still on Josh. No invented URL.

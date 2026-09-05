@@ -23,7 +23,7 @@ function esc(s) {
     .replace(/&/g, "&")
     .replace(/</g, "<")
     .replace(/>/g, ">")
-    .replace(/"/g, """);
+    .replace(/"/g, "\"");
 }
 function handoffToBrainMd(h) {
   const lines = [
@@ -67,6 +67,15 @@ async function copyText(text) {
   }
 }
 const PRESENCE = ["ONLINE", "STANDBY", "OFFLINE"];
+const CREW_STATUSES = [
+  "VERIFIED",
+  "REPORTED ACTIVE",
+  "VERIFIED CHECK-IN",
+  "VERIFIED ACTIVE",
+  "REPORTED",
+  "NAME PENDING VERIFICATION",
+  "UNVERIFIED",
+];
 const MISSION_STATUSES = ["ASSIGNED", "ACTIVE", "READY FOR REVIEW", "COMPLETE", "BLOCKED"];
 const SYSTEM_STATUSES = [
   "ACTIVE",
@@ -91,6 +100,14 @@ async function setPresence(id, presence) {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ presence, updatedBy: "operator-ui" }),
+  });
+  load();
+}
+async function setCrewStatus(id, status) {
+  await fetch(`/api/crew/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status, updatedBy: "operator-ui" }),
   });
   load();
 }
@@ -221,12 +238,25 @@ async function load() {
             >${p}</button>
           `).join("")}
         </div>
+        <div class="status-btns">
+          ${CREW_STATUSES.map((s) => `
+            <button
+              type="button"
+              class="chip ${c.status === s ? "active " + tone(s) : ""}"
+              data-id="${c.id}"
+              data-crew-status="${s}"
+            >${s}</button>
+          `).join("")}
+        </div>
       </div>
       <div class="status-stack">${pill(c.status)} ${pill(c.presence)}</div>
     </div>
   `).join("");
   $("crew").querySelectorAll("button[data-presence]").forEach((btn) => {
     btn.addEventListener("click", () => setPresence(btn.dataset.id, btn.dataset.presence));
+  });
+  $("crew").querySelectorAll("button[data-crew-status]").forEach((btn) => {
+    btn.addEventListener("click", () => setCrewStatus(btn.dataset.id, btn.dataset.crewStatus));
   });
   $("missions").innerHTML = state.missions.map((m) => `
     <div class="row mission-row">
