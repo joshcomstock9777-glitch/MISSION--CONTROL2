@@ -64,6 +64,18 @@
     </section>
     <section class="panel activity-panel">
       <h2>Activity</h2>
+      <div class="filter-row">
+        <label class="filter-label" for="event-filter">Type</label>
+        <select id="event-filter">
+          <option value="ALL">All</option>
+          <option value="note">Note</option>
+          <option value="mission">Mission</option>
+          <option value="crew">Crew</option>
+          <option value="system">System</option>
+          <option value="handoff">Handoff</option>
+          <option value="sister-repo">Sister repo</option>
+        </select>
+      </div>
       <form id="note-form" class="note-form">
         <input id="note-msg" placeholder="Quick note for the activity log" autocomplete="off" />
         <button type="submit">Log note</button>
