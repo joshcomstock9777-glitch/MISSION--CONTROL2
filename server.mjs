@@ -373,6 +373,30 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, saveState(state));
     }
 
+    if (url.pathname.startsWith("/api/sister-repos/") && req.method === "PATCH") {
+      const name = decodeURIComponent(url.pathname.split("/").pop());
+      const body = await readBody(req);
+      const state = loadState();
+      const repo = (state.sisterRepos || []).find((r) => r.name === name);
+      if (!repo) return json(res, 404, { error: "sister repo not found" });
+      const beforeStatus = repo.status;
+      if (body.status) repo.status = body.status;
+      if (body.role) repo.role = body.role;
+      if (body.url) repo.url = body.url;
+      state.updatedBy = body.updatedBy || "operator";
+      const parts = [];
+      if (body.status && body.status !== beforeStatus) {
+        parts.push(`status ${beforeStatus} → ${body.status}`);
+      }
+      if (body.role) parts.push("role updated");
+      if (body.url) parts.push("url updated");
+      pushEvent(state, "sister-repo.update", `${repo.name}: ${parts.join("; ") || "touched"}`, {
+        sisterRepo: name,
+        by: state.updatedBy,
+      });
+      return json(res, 200, saveState(state));
+    }
+
     if (url.pathname.startsWith("/api/")) {
       return json(res, 404, { error: "unknown api route" });
     }
