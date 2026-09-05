@@ -1,5 +1,21 @@
 # Build Log
 
+## 2026-09-05 — Operator UI polish (live refresh, filter, Brain MD)
+
+**Shipped**
+- Live dashboard refresh every 30s (silent).
+- Mission status filter (All / Assigned / Active / Review / Complete / Blocked).
+- Copy Brain MD button on handoff form — clipboard Markdown matching Brain handoff template (does not write STUDIO_BRAIN.md).
+
+**Next**
+- Deploy: connect this repo to Render/Fly (Josh click required — public URL not live).
+- Optional later: system status PATCH from UI, event type filters.
+
+**Blocker for Josh**
+- Hosting account link (Render blueprint `render.yaml` is ready).
+
+---
+
 ## 2026-09-05 — Operator UI restore (A–F)
 
 **Shipped**
