@@ -2,6 +2,7 @@ const $ = (id) => document.getElementById(id);
 
 const PRESENCE = ["ONLINE", "STANDBY", "OFFLINE"];
 const MISSION_STATUSES = ["ASSIGNED", "ACTIVE", "READY FOR REVIEW", "COMPLETE", "BLOCKED"];
+const SYSTEM_STATUSES = ["ACTIVE", "OK", "UNVERIFIED", "UNKNOWN", "RECOVERY", "404"];
 const REFRESH_MS = 30000;
 
 let lastMissions = [];
@@ -12,7 +13,7 @@ function pill(text) {
   const v = String(text || "").toUpperCase();
   let t = "cyan";
   if (/(COMPLETE|VERIFIED|ACTIVE|ONLINE|OK|PERSISTENT)/.test(v) && !/UNVERIFIED|NOT |PENDING/.test(v)) t = "ok";
-  else if (/(BLOCKED|404|UNKNOWN|OFFLINE|NOT SOURCE)/.test(v)) t = "bad";
+  else if (/(BLOCKED|404|UNKNOWN|OFFLINE|NOT SOURCE|RECOVERY)/.test(v)) t = "bad";
   else if (/(ASSIGNED|STANDBY|REPORTED|READY)/.test(v)) t = "warn";
   return `<span class="pill ${t}">${escapeHtml(text)}</span>`;
 }
@@ -154,6 +155,19 @@ function renderMissions(missions) {
   });
 }
 
+function systemStatusMatch(current, candidate) {
+  const c = String(current || "").toUpperCase();
+  const k = String(candidate || "").toUpperCase();
+  if (c === k) return true;
+  if (k === "OK" && /\bOK\b|PERSISTENT|FOUNDATION|SEED|ACTIVE/.test(c) && !/UNVERIFIED|UNKNOWN|404|RECOVERY/.test(c)) return true;
+  if (k === "ACTIVE" && /\bACTIVE\b/.test(c) && !/UNVERIFIED/.test(c)) return true;
+  if (k === "UNVERIFIED" && /UNVERIFIED/.test(c)) return true;
+  if (k === "UNKNOWN" && /UNKNOWN/.test(c)) return true;
+  if (k === "RECOVERY" && /RECOVERY/.test(c)) return true;
+  if (k === "404" && /404/.test(c)) return true;
+  return false;
+}
+
 function renderSystems(systems) {
   const el = $("systems");
   if (!systems?.length) {
@@ -163,15 +177,40 @@ function renderSystems(systems) {
   el.innerHTML = systems
     .map(
       (s) => `
-    <div class="row">
-      <div>
+    <div class="row system-row" data-id="${escapeHtml(s.id)}">
+      <div class="system-info">
         <div class="name">${escapeHtml(s.name)}</div>
         <div class="lane">${escapeHtml(s.home || "")}</div>
+        <div class="status-line">${pill(s.status)}</div>
       </div>
-      ${pill(s.status)}
+      <div class="btn-group system-btns">
+        ${SYSTEM_STATUSES.map(
+          (st) =>
+            `<button type="button" class="btn sm ${systemStatusMatch(s.status, st) ? "active" : ""}" data-status="${st}">${st}</button>`
+        ).join("")}
+      </div>
     </div>`
     )
     .join("");
+
+  el.querySelectorAll(".system-btns button").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const id = btn.closest(".system-row").dataset.id;
+      const status = btn.dataset.status;
+      btn.disabled = true;
+      try {
+        await api(`/api/systems/${encodeURIComponent(id)}`, {
+          method: "PATCH",
+          body: JSON.stringify({ status, updatedBy: "operator-ui" }),
+        });
+        await refresh();
+      } catch (err) {
+        alert("System update failed: " + err.message);
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  });
 }
 
 function renderRepos(repos) {
