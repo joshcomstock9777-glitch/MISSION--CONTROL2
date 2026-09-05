@@ -355,12 +355,12 @@ input:focus, select:focus, textarea:focus {
   .btn-group {
     width: 100%;
   }
-  .btn.sm, .presence-btns .btn, .status-btns .btn, .system-btns .btn {
+  .btn.sm, .presence-btns .btn, .status-btns .btn, .system-btns .btn, .repo-btns .btn {
     flex: 1 1 auto;
     text-align: center;
     min-width: 0;
   }
-  .crew-row, .mission-row, .system-row {
+  .crew-row, .mission-row, .system-row, .repo-row {
     flex-direction: column;
     align-items: stretch;
   }
