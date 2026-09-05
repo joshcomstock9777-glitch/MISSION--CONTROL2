@@ -139,3 +139,17 @@
 
 **Blocker**
 - Deploy still on Josh. No secrets. No Brain rewrite.
+
+## 2026-09-05 — Sister-repo status chips
+
+**Shipped**
+- `PATCH /api/sister-repos/:name` updates sister-repo status (and optional role/url); appends activity event.
+- Sister repos panel rows now have status chips: ACTIVE, VERIFIED, POC, NOT SOURCE OF TRUTH, UNKNOWN, ARCHIVED.
+- Does not replace sister systems. Amber and Allie remain separate.
+
+**Next**
+- Public host still needs Josh Render Blueprint click.
+- Optional: free-text custom status fields, or live Brain read path (Josh-approved, no secrets).
+
+**Blocker**
+- Deploy still on Josh. No invented URL.
