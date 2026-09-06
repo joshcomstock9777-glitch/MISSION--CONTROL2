@@ -1,5 +1,30 @@
 # Build Log
 
+## 2026-09-06 — Verification pass (background, no code change)
+
+**Shipped**
+- Re-read full tree + key files (README, server.mjs, public/*, data/seed.json, docs/*).
+- Confirmed A–F backlog complete and wired:
+  - A. Crew presence buttons → PATCH `/api/crew/:id`
+  - B. Mission status cycle → PATCH `/api/missions/:id`
+  - C. Activity log + `/api/events`
+  - D. Read-only Brain snapshot page + live/fallback `/api/brain-snapshot`
+  - E. Handoff form → `/api/handoffs` + Copy Brain MD
+  - F. Mobile polish (touch targets, safe-area, sticky header)
+- Sister-repo buttons (operator-extra.js), system status buttons, sweep, filters, live refresh all present.
+- Seed + static brain use **Tigra**. No Amber/Allie merge. No secrets.
+- No deploy. No Brain write.
+
+**Next**
+- Deploy: Josh connect Render/Fly (public URL not live). `render.yaml` + Dockerfile ready.
+- ART / CD-001 stays parked until operator pass is live and Josh says go.
+
+**Blocker for Josh**
+- Hosting account link.
+- Real SMS/text not available from this builder session.
+
+---
+
 ## 2026-09-06 — Verification pass (no code change)
 
 **Shipped**
