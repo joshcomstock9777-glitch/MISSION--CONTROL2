@@ -1,14 +1,15 @@
 # Build Log
 
-## 2026-09-05 — Live Brain snapshot fetch
+## 2026-09-05 — Brain snapshot roster refresh
 
 **Shipped**
-- `/api/brain-snapshot` now tries a live read of `studio-behind-the-cast/STUDIO_BRAIN.md` via public raw GitHub (8s timeout).
-- Parses Verified Team Roster + Active Assignment Queue tables into the snapshot.
-- Fallback static snapshot (with Tigra spelling + BRAIN-002) if fetch fails.
-- `brain.html` shows LIVE or FALLBACK on the stamp. Still read-only; does not write the Brain.
+- Restored `server.mjs` after a bad empty push during an attempted live-fetch experiment.
+- Static `brainSnapshot()` updated to match current Brain: **Tigra** spelling, Slick/Artisa role strings, **BRAIN-002** READY FOR REVIEW.
+- `brain.html` stamp can show LIVE/FALLBACK when `live`/`fetchError` fields are present (ready for a future live-fetch slice).
+- A–F backlog remains complete. No Brain write. No deploy.
 
 **Next**
+- Optional: true live fetch of raw STUDIO_BRAIN.md (payload size limited this run).
 - Deploy: Josh connect Render/Fly (public URL not live).
 - ART / CD-001 stays parked until operator pass is live and Josh says go.
 
