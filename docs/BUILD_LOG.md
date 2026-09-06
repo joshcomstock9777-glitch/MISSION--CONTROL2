@@ -1,5 +1,22 @@
 # Build Log
 
+## 2026-09-06 — Static brain TIG-001 owner fix (Tigra)
+
+**Shipped**
+- `server.mjs` static `brainSnapshot()` assignment TIG-001 owner: **Tigera → Tigra** (aligned with seed.json and Brain roster spelling).
+- Fallback snapshot no longer drifts from canonical name when live fetch fails.
+- A–F backlog remains complete. No Brain write. No deploy. No secrets.
+
+**Next**
+- Deploy: Josh connect Render/Fly (public URL not live).
+- ART / CD-001 stays parked until operator pass is live and Josh says go.
+
+**Blocker for Josh**
+- Hosting account link (Render blueprint `render.yaml` is ready).
+- Real SMS/text not available from this builder session.
+
+---
+
 ## 2026-09-06 — Seed roster alignment (Tigra)
 
 **Shipped**
