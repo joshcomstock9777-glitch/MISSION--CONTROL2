@@ -1,5 +1,24 @@
 # Build Log
 
+## 2026-09-06 — Seed roster alignment (Tigra)
+
+**Shipped**
+- `data/seed.json`: corrected crew id/name **Tigera → Tigra**, role/lane strings matched to Brain snapshot (Social Showrunner & Community Lead).
+- TIG-001 owner set to **Tigra**.
+- Slick / Artisa role strings aligned with static brain snapshot.
+- Fresh installs (no existing `state.json`) now seed the canonical spelling. Existing runtime `state.json` is untouched (verify, do not assume).
+- A–F backlog remains complete. No Brain write. No deploy.
+
+**Next**
+- Deploy: Josh connect Render/Fly (public URL not live).
+- ART / CD-001 stays parked until operator pass is live and Josh says go.
+
+**Blocker for Josh**
+- Hosting account link (Render blueprint `render.yaml` is ready).
+- Real SMS/text not available from this builder session.
+
+---
+
 ## 2026-09-05 — Live Brain snapshot fetch
 
 **Shipped**
