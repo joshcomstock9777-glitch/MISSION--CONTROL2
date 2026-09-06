@@ -1,5 +1,21 @@
 # Build Log
 
+## 2026-09-05 — Sweep event filter
+
+**Shipped**
+- Activity panel type filter: added **Sweep** option.
+- `eventTypeMatch` treats `sweep` and `sweep.*` (crew/mission/system/sister-repo/handoff board lines) as filterable.
+
+**Next**
+- Deploy: Josh connect Render/Fly (public URL not live).
+- ART / CD-001 stays parked until operator pass is live and Josh says go.
+
+**Blocker for Josh**
+- Hosting account link (Render blueprint `render.yaml` is ready).
+- Real SMS/text not available from this builder session.
+
+---
+
 ## 2026-09-05 — Sister-repo buttons + front-to-back sweep
 
 **Shipped**

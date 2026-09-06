@@ -22,10 +22,10 @@ function pill(text) {
 
 function escapeHtml(s) {
   return String(s ?? "")
-    .replace(/&/g, "&")
-    .replace(/</g, "<")
-    .replace(/>/g, ">")
-    .replace(/"/g, """);
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 function fmtTime(iso) {
@@ -245,6 +245,7 @@ function eventTypeMatch(type, filter) {
   if (f === "sister-repo") return t.startsWith("sister-repo") || t.startsWith("sister");
   if (f === "handoff") return t === "handoff" || t.startsWith("handoff");
   if (f === "note") return t === "note";
+  if (f === "sweep") return t === "sweep" || t.startsWith("sweep.");
   return t === f;
 }
 
