@@ -7,8 +7,10 @@ const REFRESH_MS = 30000;
 
 let lastMissions = [];
 let lastEvents = [];
+let lastCrew = [];
 let missionFilter = "ALL";
 let eventFilter = "ALL";
+let crewFilter = "ALL";
 let refreshTimer = null;
 
 function pill(text) {
@@ -22,10 +24,10 @@ function pill(text) {
 
 function escapeHtml(s) {
   return String(s ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/&/g, "&")
+    .replace(/</g, "<")
+    .replace(/>/g, ">")
+    .replace(/"/g, """);
 }
 
 function fmtTime(iso) {
@@ -54,12 +56,20 @@ async function api(path, opts = {}) {
 }
 
 function renderCrew(crew) {
+  lastCrew = crew || [];
   const el = $("crew");
-  if (!crew?.length) {
-    el.innerHTML = `<div class="empty">No crew</div>`;
+  if (!el) return;
+  const filter = crewFilter || "ALL";
+  const list =
+    filter === "ALL"
+      ? lastCrew
+      : lastCrew.filter((c) => String(c.presence || "").toUpperCase() === filter);
+
+  if (!list.length) {
+    el.innerHTML = `<div class="empty">${filter === "ALL" ? "No crew" : "No crew match filter"}</div>`;
     return;
   }
-  el.innerHTML = crew
+  el.innerHTML = list
     .map(
       (c) => `
     <div class="row crew-row" data-id="${escapeHtml(c.id)}">
@@ -277,6 +287,7 @@ function renderEvents(events) {
 
 function renderRoundtable(rt) {
   const el = $("roundtable");
+  if (!el) return;
   if (!rt) {
     el.innerHTML = `<div class="empty">…</div>`;
     return;
@@ -473,6 +484,11 @@ function wireForms() {
   $("mission-filter")?.addEventListener("change", (e) => {
     missionFilter = e.target.value || "ALL";
     renderMissions(lastMissions);
+  });
+
+  $("crew-filter")?.addEventListener("change", (e) => {
+    crewFilter = e.target.value || "ALL";
+    renderCrew(lastCrew);
   });
 
   $("event-filter")?.addEventListener("change", (e) => {
