@@ -1,5 +1,26 @@
 # Build Log
 
+## 2026-09-06 — Systems filter + board pulse
+
+**Shipped**
+- Systems panel status filter (All / Ok / Unverified / Unknown / Recovery / 404).
+- Header pulse: online crew, active missions, blocked, systems hot.
+- LIVE / DOWN health chip + build stamp `2026-09-06-g`.
+- Cache-bust query on app.js / operator-extra.js.
+- Files: `public/index.html`, `public/app.js`, `public/styles.css`.
+- No Brain write. No secrets. No Amber/Allie merge. ART / CD-001 parked.
+
+**Next**
+- Josh must redeploy Fly (`fly deploy`) — live box is still serving older JS.
+- Fly volume if `data/state.json` should survive machine replace.
+
+**Blocker for Josh**
+- Fly redeploy. This builder cannot publish the machine.
+- Optional Fly volume.
+- Real SMS/text not available from this builder session.
+
+---
+
 ## 2026-09-06 — Mission owner filter
 
 **Shipped**
