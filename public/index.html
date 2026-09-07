@@ -22,6 +22,14 @@
   </header>
 
   <main class="grid">
+    <section class="panel roundtable-panel">
+      <div class="panel-head">
+        <h2>Roundtable</h2>
+        <button type="button" class="btn sm" id="roundtable-refresh" title="Refresh attention board">Refresh</button>
+      </div>
+      <div id="roundtable" class="empty">Loading attention board…</div>
+    </section>
+
     <section class="panel">
       <div class="panel-head">
         <h2>Crew</h2>
@@ -84,7 +92,7 @@
         <label>Completed <textarea name="completed" rows="2" placeholder="What finished"></textarea></label>
         <label>Evidence <textarea name="evidence" rows="2" placeholder="Links, files, notes"></textarea></label>
         <label>Tools <input name="tools" placeholder="Tools used" /></label>
-        <label>Verified <input name="verified" placeholder="What was verified" /></label>
+        <label>Verified <input name="verified" placeholder="What was verified"></textarea></label>
         <label>Remains <textarea name="remains" rows="2" placeholder="Still open"></textarea></label>
         <label>Blockers <textarea name="blockers" rows="2" placeholder="What's blocking"></textarea></label>
         <label>Next action <textarea name="nextAction" rows="2" placeholder="Immediate next step"></textarea></label>
