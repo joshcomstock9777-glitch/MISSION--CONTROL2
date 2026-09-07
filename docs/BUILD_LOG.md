@@ -1,5 +1,18 @@
 # Mission Control Build Log
 
+## 2026-09-07 — STAND DOWN (redesign in progress)
+
+**Status**
+- Background backlog agent ordered to stand down. Josh is redesigning the system; no further backlog slices (A–F or Roundtable) should be implemented or pushed until the redesign direction is confirmed.
+- Existing shipped surface (crew presence, mission cycle, activity log, Brain snapshot, handoff form, mobile polish, Roundtable panel, Copy Brain MD) remains as-is. Do not refactor, extend, or "improve" it.
+- See `docs/STAND_DOWN.md` for the full notice.
+
+**Next**
+- Await Josh's redesign brief. Resume only on explicit instruction.
+
+**Blocker for Josh**
+- Redesign direction needed before any further code changes.
+
 ## 2026-09-07 — Roundtable attention board wired
 
 **Shipped**
