@@ -17,7 +17,11 @@
     </div>
     <div class="meta">
       <a class="link" href="/brain.html">Brain snapshot</a>
-      <div id="stamp">loading…</div>
+      <div id="board-pulse" class="rt-counts header-pulse"></div>
+      <div class="meta-line">
+        <span id="health-chip" class="rt-chip">…</span>
+        <div id="stamp">loading…</div>
+      </div>
     </div>
   </header>
   <main class="grid">
@@ -76,6 +80,17 @@
     </section>
     <section class="panel">
       <h2>Systems</h2>
+      <div class="filter-row">
+        <label class="filter-label" for="system-filter">Status</label>
+        <select id="system-filter">
+          <option value="ALL">All</option>
+          <option value="OK">Ok / live</option>
+          <option value="UNVERIFIED">Unverified</option>
+          <option value="UNKNOWN">Unknown</option>
+          <option value="RECOVERY">Recovery</option>
+          <option value="404">404</option>
+        </select>
+      </div>
       <div id="systems"></div>
       <h2 style="margin-top:18px">Sister repos</h2>
       <div id="repos"></div>
@@ -140,7 +155,7 @@
       <div id="handoffs" class="events"></div>
     </section>
   </main>
-  <script src="/app.js"></script>
-  <script src="/operator-extra.js"></script>
+  <script src="/app.js?v=2026-09-06-g"></script>
+  <script src="/operator-extra.js?v=2026-09-06-g"></script>
 </body>
 </html>
