@@ -368,6 +368,28 @@ input:focus, select:focus, textarea:focus {
     font-size: 1.2rem;
   }
   input, select, textarea, button[type="submit"] {
-    font-size: 16px; /* reduces iOS zoom */
+    font-size: 16px;
+  }
+}
+
+.header-pulse {
+  margin: 4px 0 0;
+  justify-content: flex-end;
+}
+.meta-line {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+@media (max-width: 719px) {
+  .meta {
+    width: 100%;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .header-pulse,
+  .meta-line {
+    justify-content: flex-start;
   }
 }
