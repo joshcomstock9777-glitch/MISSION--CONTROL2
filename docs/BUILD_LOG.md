@@ -1,5 +1,21 @@
 # Mission Control Build Log
 
+## 2026-09-07 — Roundtable attention panel
+
+**Shipped**
+- Dashboard Roundtable panel (top of grid) consuming existing `/api/roundtable`.
+- Counts pills: blocked / review / active / Josh decisions / offline.
+- Sections: Talk next, Blocked list, Ready for review, Josh decisions from handoffs, Offline crew, Systems needing verify.
+- Manual Refresh button; also refreshes with the 30s board cycle.
+- Build stamp `2026-09-07-g`. Files: `public/index.html`, `public/app.js`, `public/styles.css`.
+
+**Next**
+- Public host (Render/Fly) still needs Josh account connection.
+- Optional: paste-to-handoff from Copy Brain MD, or tighter mobile spacing if Josh reports friction.
+
+**Blocker for Josh**
+- Deploy click on Render (or Fly) — repo is deploy-ready; no public URL until host is connected.
+
 ## 2026-09-07 — Copy Brain MD helper
 
 **Shipped**
