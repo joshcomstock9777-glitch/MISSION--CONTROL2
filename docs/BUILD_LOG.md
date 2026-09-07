@@ -1,5 +1,25 @@
 # Build Log
 
+## 2026-09-06 — Filter persistence (localStorage)
+
+**Shipped**
+- Operator filters (crew presence, mission status, mission owner, systems status, activity type) now persist in `localStorage` key `mc.filters.v1`.
+- Survives full page reload on Android; still holds across live refresh.
+- Build stamp `2026-09-06-h`. Cache-bust on app.js / operator-extra.js.
+- Files: `public/app.js`, `public/index.html`.
+- No Brain write. No secrets. No Amber/Allie merge. ART / CD-001 parked.
+
+**Next**
+- Josh must redeploy Fly (`fly deploy`) — live box is still serving older JS until then.
+- Fly volume if `data/state.json` should survive machine replace.
+
+**Blocker for Josh**
+- Fly redeploy. This builder cannot publish the machine.
+- Optional Fly volume.
+- Real SMS/text not available from this builder session.
+
+---
+
 ## 2026-09-06 — Systems filter + board pulse
 
 **Shipped**
