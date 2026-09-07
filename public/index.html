@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#070b14" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>Mission Control · Moonshadow</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div>
+      <div class="brand">Moonshadow Studio</div>
+      <h1>Mission Control</h1>
+    </div>
+    <div class="meta">
+      <a class="link" href="/brain.html">Brain Snapshot</a>
+      <button type="button" class="btn sm" id="sweep-btn" title="Log current board state">Sweep</button>
+      <div id="stamp">…</div>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Crew</h2>
+        <div class="filters">
+          <button type="button" class="chip active" data-crew-filter="ALL">All</button>
+          <button type="button" class="chip" data-crew-filter="ONLINE">Online</button>
+          <button type="button" class="chip" data-crew-filter="STANDBY">Standby</button>
+          <button type="button" class="chip" data-crew-filter="OFFLINE">Offline</button>
+        </div>
+      </div>
+      <div id="crew"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Missions</h2>
+        <div class="filters">
+          <button type="button" class="chip active" data-mission-filter="ALL">All</button>
+          <button type="button" class="chip" data-mission-filter="ACTIVE">Active</button>
+          <button type="button" class="chip" data-mission-filter="BLOCKED">Blocked</button>
+          <button type="button" class="chip" data-mission-filter="READY FOR REVIEW">Review</button>
+          <button type="button" class="chip" data-mission-filter="ASSIGNED">Assigned</button>
+        </div>
+      </div>
+      <div id="missions"></div>
+    </section>
+
+    <section class="panel activity-panel">
+      <div class="panel-head">
+        <h2>Activity</h2>
+        <div class="filters">
+          <button type="button" class="chip active" data-event-filter="ALL">All</button>
+          <button type="button" class="chip" data-event-filter="crew">Crew</button>
+          <button type="button" class="chip" data-event-filter="mission">Mission</button>
+          <button type="button" class="chip" data-event-filter="handoff">Handoff</button>
+        </div>
+      </div>
+      <div id="events" class="events"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Systems</h2>
+      <div id="systems"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Sister repos</h2>
+      <div id="repos"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Handoff</h2>
+      <form id="handoff-form" class="handoff-form">
+        <label>Name <input name="name" required placeholder="Who" autocomplete="off" /></label>
+        <label>Assignment ID <input name="assignmentId" required placeholder="e.g. SLI-001" autocomplete="off" /></label>
+        <label>Status <input name="status" placeholder="REPORTED / ACTIVE / BLOCKED" /></label>
+        <label>Completed <textarea name="completed" rows="2" placeholder="What finished"></textarea></label>
+        <label>Evidence <textarea name="evidence" rows="2" placeholder="Links, files, notes"></textarea></label>
+        <label>Tools <input name="tools" placeholder="Tools used" /></label>
+        <label>Verified <input name="verified" placeholder="What was verified" /></label>
+        <label>Remains <textarea name="remains" rows="2" placeholder="Still open"></textarea></label>
+        <label>Blockers <textarea name="blockers" rows="2" placeholder="What's blocking"></textarea></label>
+        <label>Next action <textarea name="nextAction" rows="2" placeholder="Immediate next step"></textarea></label>
+        <label class="check"><input type="checkbox" name="joshDecisionRequired" value="YES" /> Josh decision required</label>
+        <label>Josh note <input name="joshDecisionNote" placeholder="What needs Josh" /></label>
+        <button type="submit" class="btn primary">Save handoff</button>
+      </form>
+      <div id="handoffs-list" class="handoffs-list"></div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+  <script src="/operator-extra.js"></script>
+</body>
+</html>
