@@ -1,5 +1,26 @@
 # Build Log
 
+## 2026-09-06 — Mobile polish (Android) + Reset filters
+
+**Shipped**
+- Header **Reset filters** button clears all operator filters and localStorage `mc.filters.v1`.
+- Fixed broken `escapeHtml` entity encoding.
+- Android-focused CSS: 40px touch targets on status/presence buttons, 16px inputs (no zoom), overflow-x hidden, meta-actions row.
+- Build stamp `2026-09-06-i`. Cache-bust on app.js / operator-extra.js.
+- Files: `public/app.js`, `public/index.html`, `public/styles.css`.
+- No Brain write. No secrets. No Amber/Allie merge. ART / CD-001 parked.
+
+**Next**
+- Josh must redeploy Fly (`fly deploy`) — live box still serves older assets until then.
+- Optional Fly volume if `data/state.json` should survive machine replace.
+
+**Blocker for Josh**
+- Fly redeploy. This builder cannot publish the machine.
+- Optional Fly volume.
+- Real SMS/text not available from this builder session.
+
+---
+
 ## 2026-09-06 — Filter persistence (localStorage)
 
 **Shipped**
