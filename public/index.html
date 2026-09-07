@@ -38,12 +38,15 @@
     <section class="panel">
       <div class="panel-head">
         <h2>Missions</h2>
-        <div class="filters">
+        <div class="filters" id="mission-status-filters">
           <button type="button" class="chip active" data-mission-filter="ALL">All</button>
           <button type="button" class="chip" data-mission-filter="ACTIVE">Active</button>
           <button type="button" class="chip" data-mission-filter="BLOCKED">Blocked</button>
           <button type="button" class="chip" data-mission-filter="READY FOR REVIEW">Review</button>
           <button type="button" class="chip" data-mission-filter="ASSIGNED">Assigned</button>
+        </div>
+        <div class="filters owner-filters" id="mission-owner-filters">
+          <button type="button" class="chip active" data-owner-filter="ALL">All owners</button>
         </div>
       </div>
       <div id="missions"></div>

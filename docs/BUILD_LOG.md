@@ -19,3 +19,17 @@
 
 **Blocker for Josh**
 - Deploy click on Render (or Fly) — repo is deploy-ready; no public URL until host is connected.
+
+## 2026-09-07 — Mission owner filter
+
+**Shipped**
+- Dynamic owner filter chips under Missions panel (built from live mission owners).
+- Status filter + owner filter combine (AND).
+- Mobile-friendly chip row; build stamp `2026-09-07-f`.
+
+**Next**
+- Optional: Copy Brain MD helper on handoff / brain page.
+- Public host still needs Josh (Render/Fly connect).
+
+**Blocker for Josh**
+- Deploy click on Render or Fly — no public URL until host is connected.

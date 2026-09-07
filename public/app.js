@@ -9,9 +9,10 @@ let lastEvents = [];
 let lastCrew = [];
 let lastSystems = [];
 let missionFilter = "ALL";
+let ownerFilter = "ALL";
 let eventFilter = "ALL";
 let crewFilter = "ALL";
-const BUILD = "2026-09-07-e";
+const BUILD = "2026-09-07-f";
 
 function escapeHtml(s) {
   return String(s ?? "")
@@ -42,6 +43,40 @@ async function api(path, opts = {}) {
 
 function presenceMatch(a, b) {
   return String(a || "").toUpperCase() === String(b || "").toUpperCase();
+}
+
+function uniqueOwners(missions) {
+  const set = new Set();
+  (missions || []).forEach((m) => {
+    const o = String(m.owner || "").trim();
+    if (o) set.add(o);
+  });
+  return Array.from(set).sort((a, b) => a.localeCompare(b));
+}
+
+function renderOwnerFilters(missions) {
+  const el = $("mission-owner-filters");
+  if (!el) return;
+  const owners = uniqueOwners(missions);
+  const current = ownerFilter;
+  el.innerHTML =
+    `<button type="button" class="chip ${current === "ALL" ? "active" : ""}" data-owner-filter="ALL">All owners</button>` +
+    owners
+      .map(
+        (o) =>
+          `<button type="button" class="chip ${current === o ? "active" : ""}" data-owner-filter="${escapeHtml(o)}">${escapeHtml(o)}</button>`
+      )
+      .join("");
+
+  el.querySelectorAll("[data-owner-filter]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      ownerFilter = btn.dataset.ownerFilter;
+      el.querySelectorAll("[data-owner-filter]").forEach((b) =>
+        b.classList.toggle("active", b.dataset.ownerFilter === ownerFilter)
+      );
+      renderMissions(lastMissions);
+    });
+  });
 }
 
 function renderCrew(crew) {
@@ -102,6 +137,9 @@ function renderMissions(missions) {
   let list = lastMissions;
   if (missionFilter !== "ALL") {
     list = list.filter((m) => String(m.status || "").toUpperCase() === missionFilter);
+  }
+  if (ownerFilter !== "ALL") {
+    list = list.filter((m) => String(m.owner || "").trim() === ownerFilter);
   }
   if (!list.length) {
     el.innerHTML = `<div class="empty">No missions match</div>`;
@@ -312,6 +350,7 @@ async function refresh() {
     stamp.textContent = `${state.updatedAt ? new Date(state.updatedAt).toLocaleString() : "—"} · ${BUILD}`;
   }
   renderCrew(state.crew || []);
+  renderOwnerFilters(state.missions || []);
   renderMissions(state.missions || []);
   renderSystems(state.systems || []);
   renderEvents(eventsRes.events || state.events || []);

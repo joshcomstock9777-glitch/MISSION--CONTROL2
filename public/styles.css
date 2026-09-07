@@ -75,6 +75,7 @@ body {
 .panel-head h2 { margin: 0; }
 
 .filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.owner-filters { width: 100%; margin-top: 4px; }
 .chip {
   border: 1px solid var(--line);
   background: transparent;
