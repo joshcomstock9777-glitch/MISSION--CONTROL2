@@ -14,8 +14,55 @@ let missionOwnerFilter = "ALL";
 let eventFilter = "ALL";
 let crewFilter = "ALL";
 let systemFilter = "ALL";
-const BUILD = "2026-09-06-g";
+const BUILD = "2026-09-06-h";
 let refreshTimer = null;
+
+const FILTER_KEY = "mc.filters.v1";
+
+function loadFilters() {
+  try {
+    const raw = localStorage.getItem(FILTER_KEY);
+    if (!raw) return;
+    const f = JSON.parse(raw);
+    if (f.missionFilter) missionFilter = f.missionFilter;
+    if (f.missionOwnerFilter) missionOwnerFilter = f.missionOwnerFilter;
+    if (f.eventFilter) eventFilter = f.eventFilter;
+    if (f.crewFilter) crewFilter = f.crewFilter;
+    if (f.systemFilter) systemFilter = f.systemFilter;
+  } catch (_) {}
+}
+
+function saveFilters() {
+  try {
+    localStorage.setItem(
+      FILTER_KEY,
+      JSON.stringify({
+        missionFilter,
+        missionOwnerFilter,
+        eventFilter,
+        crewFilter,
+        systemFilter,
+      })
+    );
+  } catch (_) {}
+}
+
+function applyFilterSelects() {
+  const map = [
+    ["mission-filter", missionFilter],
+    ["mission-owner-filter", missionOwnerFilter],
+    ["event-filter", eventFilter],
+    ["crew-filter", crewFilter],
+    ["system-filter", systemFilter],
+  ];
+  for (const [id, val] of map) {
+    const el = $(id);
+    if (el && val) {
+      const ok = [...el.options].some((o) => o.value === val);
+      if (ok) el.value = val;
+    }
+  }
+}
 
 function pill(text) {
   const v = String(text || "").toUpperCase();
@@ -31,7 +78,7 @@ function escapeHtml(s) {
     .replace(/&/g, "&")
     .replace(/</g, "<")
     .replace(/>/g, ">")
-    .replace(/"/g, """);
+    .replace(/"/g, "\"");
 }
 
 function fmtTime(iso) {
@@ -427,6 +474,7 @@ async function refresh() {
   renderBoardPulse(state);
   renderCrew(state.crew);
   fillMissionOwnerFilter(state.crew, state.missions);
+  applyFilterSelects();
   renderMissions(state.missions);
   renderSystems(state.systems);
   renderRepos(state.sisterRepos);
@@ -519,31 +567,38 @@ function wireForms() {
 
   $("mission-filter")?.addEventListener("change", (e) => {
     missionFilter = e.target.value || "ALL";
+    saveFilters();
     renderMissions(lastMissions);
   });
 
   $("mission-owner-filter")?.addEventListener("change", (e) => {
     missionOwnerFilter = e.target.value || "ALL";
+    saveFilters();
     renderMissions(lastMissions);
   });
 
   $("crew-filter")?.addEventListener("change", (e) => {
     crewFilter = e.target.value || "ALL";
+    saveFilters();
     renderCrew(lastCrew);
   });
 
   $("event-filter")?.addEventListener("change", (e) => {
     eventFilter = e.target.value || "ALL";
+    saveFilters();
     renderEvents(lastEvents);
   });
 
   $("system-filter")?.addEventListener("change", (e) => {
     systemFilter = e.target.value || "ALL";
+    saveFilters();
     renderSystems(lastSystems);
   });
 }
 
+loadFilters();
 wireForms();
+applyFilterSelects();
 function renderBoardPulse(state) {
   const el = $("board-pulse");
   if (!el) return;
