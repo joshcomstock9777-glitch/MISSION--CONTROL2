@@ -8,10 +8,13 @@ const REFRESH_MS = 30000;
 let lastMissions = [];
 let lastEvents = [];
 let lastCrew = [];
+let lastSystems = [];
 let missionFilter = "ALL";
 let missionOwnerFilter = "ALL";
 let eventFilter = "ALL";
 let crewFilter = "ALL";
+let systemFilter = "ALL";
+const BUILD = "2026-09-06-g";
 let refreshTimer = null;
 
 function pill(text) {
@@ -25,10 +28,10 @@ function pill(text) {
 
 function escapeHtml(s) {
   return String(s ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/&/g, "&")
+    .replace(/</g, "<")
+    .replace(/>/g, ">")
+    .replace(/"/g, """);
 }
 
 function fmtTime(iso) {
@@ -186,12 +189,18 @@ function systemStatusMatch(current, candidate) {
 }
 
 function renderSystems(systems) {
+  lastSystems = systems || [];
   const el = $("systems");
-  if (!systems?.length) {
-    el.innerHTML = `<div class="empty">No systems</div>`;
+  const filter = systemFilter || "ALL";
+  const list =
+    filter === "ALL"
+      ? lastSystems
+      : lastSystems.filter((sys) => systemStatusMatch(sys.status, filter));
+  if (!list.length) {
+    el.innerHTML = `<div class="empty">${filter === "ALL" ? "No systems" : "No systems match filter"}</div>`;
     return;
   }
-  el.innerHTML = systems
+  el.innerHTML = list
     .map(
       (s) => `
     <div class="row system-row" data-id="${escapeHtml(s.id)}">
@@ -408,7 +417,14 @@ async function refresh() {
     api("/api/roundtable"),
     api("/api/handoffs"),
   ]);
-  $("stamp").textContent = state.updatedAt ? `Updated ${fmtTime(state.updatedAt)}` : "";
+  const stamp = $("stamp");
+  if (stamp) stamp.textContent = state.updatedAt ? `Updated ${fmtTime(state.updatedAt)} · ${BUILD}` : BUILD;
+  const health = $("health-chip");
+  if (health) {
+    health.textContent = "LIVE";
+    health.className = "rt-chip ok";
+  }
+  renderBoardPulse(state);
   renderCrew(state.crew);
   fillMissionOwnerFilter(state.crew, state.missions);
   renderMissions(state.missions);
@@ -520,12 +536,41 @@ function wireForms() {
     eventFilter = e.target.value || "ALL";
     renderEvents(lastEvents);
   });
+
+  $("system-filter")?.addEventListener("change", (e) => {
+    systemFilter = e.target.value || "ALL";
+    renderSystems(lastSystems);
+  });
 }
 
 wireForms();
+function renderBoardPulse(state) {
+  const el = $("board-pulse");
+  if (!el) return;
+  const crew = state.crew || [];
+  const missions = state.missions || [];
+  const systems = state.systems || [];
+  const online = crew.filter((c) => String(c.presence || "").toUpperCase() === "ONLINE").length;
+  const blocked = missions.filter((m) => String(m.status || "").toUpperCase() === "BLOCKED").length;
+  const active = missions.filter((m) => String(m.status || "").toUpperCase() === "ACTIVE").length;
+  const hot = systems.filter((s) => /UNKNOWN|404|RECOVERY|UNVERIFIED/i.test(String(s.status || ""))).length;
+  el.innerHTML = `
+    <span class="rt-chip ok">Online ${online}</span>
+    <span class="rt-chip cyan">Active ${active}</span>
+    <span class="rt-chip bad">Blocked ${blocked}</span>
+    <span class="rt-chip warn">Systems hot ${hot}</span>
+  `;
+}
+
 refresh()
   .then(() => startLiveRefresh())
   .catch((err) => {
-    $("stamp").textContent = "Load failed: " + err.message;
+    const stamp = $("stamp");
+    if (stamp) stamp.textContent = "Load failed: " + err.message;
+    const health = $("health-chip");
+    if (health) {
+      health.textContent = "DOWN";
+      health.className = "rt-chip bad";
+    }
     console.error(err);
   });
