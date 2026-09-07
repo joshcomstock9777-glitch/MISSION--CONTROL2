@@ -8,7 +8,6 @@ let lastMissions = [];
 let lastEvents = [];
 let lastCrew = [];
 let lastSystems = [];
-let lastRoundtable = null;
 let missionFilter = "ALL";
 let ownerFilter = "ALL";
 let eventFilter = "ALL";
@@ -81,67 +80,60 @@ function renderOwnerFilters(missions) {
 }
 
 function renderRoundtable(rt) {
-  lastRoundtable = rt || null;
   const el = $("roundtable");
   if (!el) return;
   if (!rt) {
-    el.innerHTML = `<div class="empty">No roundtable data</div>`;
+    el.innerHTML = `<div class="empty">Roundtable unavailable</div>`;
     return;
   }
-  const c = rt.counts || {};
-  const talk = (rt.nextTalk || []).map((t) => `<li>${escapeHtml(t)}</li>`).join("") || "<li>Board clear</li>";
+  const counts = rt.counts || {};
+  const nextTalk = (rt.nextTalk || []).length
+    ? `<ul class="rt-list">${rt.nextTalk.map((t) => `<li>${escapeHtml(t)}</li>`).join("")}</ul>`
+    : `<div class="empty">Nothing flagged</div>`;
+
   const blocked = (rt.blocked || [])
-    .slice(0, 6)
-    .map((m) => `<div class="lane">${escapeHtml(m.id)} · ${escapeHtml(m.title)} · ${escapeHtml(m.owner)}</div>`)
-    .join("") || `<div class="lane">None</div>`;
+    .map(
+      (m) =>
+        `<div class="rt-item"><span class="name">${escapeHtml(m.id)}</span> · ${escapeHtml(m.title)} ${pill(m.status)}</div>`
+    )
+    .join("") || `<div class="empty">None</div>`;
+
   const review = (rt.readyForReview || [])
-    .slice(0, 6)
-    .map((m) => `<div class="lane">${escapeHtml(m.id)} · ${escapeHtml(m.title)} · ${escapeHtml(m.owner)}</div>`)
-    .join("") || `<div class="lane">None</div>`;
+    .map(
+      (m) =>
+        `<div class="rt-item"><span class="name">${escapeHtml(m.id)}</span> · ${escapeHtml(m.title)} ${pill(m.status)}</div>`
+    )
+    .join("") || `<div class="empty">None</div>`;
+
   const josh = (rt.joshDecisions || [])
-    .slice(0, 5)
-    .map((h) => `<div class="lane">${escapeHtml(h.name)} · ${escapeHtml(h.assignmentId)} · ${escapeHtml(h.joshDecisionNote || h.status || "")}</div>`)
-    .join("") || `<div class="lane">None</div>`;
+    .map(
+      (h) =>
+        `<div class="rt-item"><span class="name">${escapeHtml(h.name)}</span> · ${escapeHtml(h.assignmentId)} ${pill("JOSH DECISION")}<div class="lane">${escapeHtml(h.joshDecisionNote || h.nextAction || "")}</div></div>`
+    )
+    .join("") || `<div class="empty">None</div>`;
+
   const offline = (rt.offlineCrew || [])
-    .map((c) => `<span class="pill bad">${escapeHtml(c.name)}</span>`)
-    .join(" ") || `<span class="lane">None offline</span>`;
+    .map((c) => `<div class="rt-item"><span class="name">${escapeHtml(c.name)}</span> · ${escapeHtml(c.role)} ${pill(c.presence)}</div>`)
+    .join("") || `<div class="empty">None</div>`;
+
   const systems = (rt.systemsNeedingVerify || [])
-    .map((s) => `<span class="pill warn">${escapeHtml(s.name)}</span>`)
-    .join(" ") || `<span class="lane">All clear</span>`;
+    .map((s) => `<div class="rt-item"><span class="name">${escapeHtml(s.name)}</span> ${pill(s.status)}<div class="lane">${escapeHtml(s.home || "")}</div></div>`)
+    .join("") || `<div class="empty">None</div>`;
 
   el.innerHTML = `
     <div class="rt-counts">
-      <span class="pill bad">${c.blocked || 0} blocked</span>
-      <span class="pill warn">${c.review || 0} review</span>
-      <span class="pill ok">${c.active || 0} active</span>
-      <span class="pill cyan">${c.joshDecisions || 0} Josh</span>
-      <span class="pill bad">${c.offline || 0} offline</span>
+      <span class="rt-count">${counts.blocked || 0} blocked</span>
+      <span class="rt-count">${counts.review || 0} review</span>
+      <span class="rt-count">${counts.active || 0} active</span>
+      <span class="rt-count">${counts.joshDecisions || 0} Josh</span>
+      <span class="rt-count">${counts.offline || 0} offline</span>
     </div>
-    <div class="rt-section">
-      <div class="name">Talk next</div>
-      <ul class="rt-list">${talk}</ul>
-    </div>
-    <div class="rt-section">
-      <div class="name">Blocked</div>
-      ${blocked}
-    </div>
-    <div class="rt-section">
-      <div class="name">Ready for review</div>
-      ${review}
-    </div>
-    <div class="rt-section">
-      <div class="name">Josh decisions (handoffs)</div>
-      ${josh}
-    </div>
-    <div class="rt-section">
-      <div class="name">Offline crew</div>
-      <div class="status-line">${offline}</div>
-    </div>
-    <div class="rt-section">
-      <div class="name">Systems needing verify</div>
-      <div class="status-line">${systems}</div>
-    </div>
-    <div class="lane" style="margin-top:8px">${rt.at ? "As of " + new Date(rt.at).toLocaleString() : ""}</div>
+    <div class="rt-section"><div class="rt-label">Talk next</div>${nextTalk}</div>
+    <div class="rt-section"><div class="rt-label">Blocked</div>${blocked}</div>
+    <div class="rt-section"><div class="rt-label">Ready for review</div>${review}</div>
+    <div class="rt-section"><div class="rt-label">Josh decisions</div>${josh}</div>
+    <div class="rt-section"><div class="rt-label">Offline crew</div>${offline}</div>
+    <div class="rt-section"><div class="rt-label">Systems needing verify</div>${systems}</div>
   `;
 }
 
@@ -424,7 +416,7 @@ function wireRoundtable() {
 }
 
 async function refresh() {
-  const [state, eventsRes, handoffs, rt] = await Promise.all([
+  const [state, eventsRes, handoffs, roundtable] = await Promise.all([
     api("/api/state"),
     api("/api/events"),
     api("/api/handoffs"),
@@ -440,7 +432,7 @@ async function refresh() {
   renderSystems(state.systems || []);
   renderEvents(eventsRes.events || state.events || []);
   renderHandoffs(handoffs);
-  if (rt) renderRoundtable(rt);
+  if (roundtable) renderRoundtable(roundtable);
   if (typeof renderRepos === "function") {
     renderRepos(state.sisterRepos || []);
   }
