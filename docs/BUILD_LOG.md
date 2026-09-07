@@ -1,5 +1,19 @@
 # Mission Control Build Log
 
+## 2026-09-07 — Copy Brain MD helper
+
+**Shipped**
+- Brain Snapshot page: "Copy Brain MD" button builds a clean Markdown summary (source, core rule, roster table, assignments table, notes) from the live `/api/brain-snapshot` payload and copies it to clipboard (with Android WebView fallback).
+- Read-only only — does not write STUDIO_BRAIN.md or any sister system.
+- Build stamp path unchanged; one-file change: `public/brain.html`.
+
+**Next**
+- Public host (Render/Fly) still needs Josh account connection.
+- Optional: paste-to-handoff from copied MD, or tighter mobile spacing tweaks if Josh reports friction.
+
+**Blocker for Josh**
+- Deploy click on Render (or Fly) — repo is deploy-ready; no public URL until host is connected.
+
 ## 2026-09-07 — Dashboard restore (A–F surface)
 
 **Shipped**

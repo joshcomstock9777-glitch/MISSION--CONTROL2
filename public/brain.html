@@ -16,6 +16,7 @@
     </div>
     <div class="meta">
       <a class="link" href="/">← Mission Control</a>
+      <button type="button" class="btn sm" id="copy-brain-md" title="Copy snapshot as Markdown">Copy Brain MD</button>
       <div id="stamp">loading…</div>
     </div>
   </header>
@@ -42,6 +43,8 @@
     </section>
   </main>
   <script>
+    let lastSnapshot = null;
+
     function pill(text) {
       const v = String(text || "").toUpperCase();
       let t = "cyan";
@@ -50,9 +53,87 @@
       else if (/(ASSIGNED|STANDBY|REPORTED)/.test(v)) t = "warn";
       return `<span class="pill ${t}">${text}</span>`;
     }
+
+    function snapshotToMarkdown(s) {
+      if (!s) return "";
+      const lines = [];
+      lines.push("# Studio Brain Snapshot (read-only)");
+      lines.push("");
+      lines.push(`- Snapshot at: ${s.snapshotAt || ""}`);
+      lines.push(`- Live: ${s.live ? "YES" : "NO (fallback)"}`);
+      if (s.fetchError) lines.push(`- Fetch note: ${s.fetchError}`);
+      lines.push(`- Source: ${s.source?.repo || ""} / ${s.source?.path || ""} (${s.source?.branch || ""})`);
+      lines.push(`- Custodian: ${s.source?.custodian || ""} · Authority: ${s.source?.authority || ""}`);
+      lines.push("");
+      lines.push("## Core rule");
+      lines.push("");
+      lines.push(s.coreRule || "");
+      lines.push("");
+      lines.push("## Roster");
+      lines.push("");
+      lines.push("| Name | Role | Status | Lane |");
+      lines.push("| --- | --- | --- | --- |");
+      (s.roster || []).forEach((r) => {
+        lines.push(`| ${r.name || ""} | ${r.role || ""} | ${r.status || ""} | ${r.lane || ""} |`);
+      });
+      lines.push("");
+      lines.push("## Assignments");
+      lines.push("");
+      lines.push("| ID | Owner | Title | Status | Evidence |");
+      lines.push("| --- | --- | --- | --- | --- |");
+      (s.assignments || []).forEach((a) => {
+        lines.push(`| ${a.id || ""} | ${a.owner || ""} | ${a.title || ""} | ${a.status || ""} | ${a.evidence || ""} |`);
+      });
+      lines.push("");
+      lines.push("## Notes");
+      lines.push("");
+      (s.notes || []).forEach((n) => lines.push(`- ${n}`));
+      lines.push("");
+      lines.push("---");
+      lines.push("Read-only. Canonical memory remains studio-behind-the-cast/STUDIO_BRAIN.md. Does not write the Brain.");
+      return lines.join("\n");
+    }
+
+    async function copyBrainMd() {
+      const btn = document.getElementById("copy-brain-md");
+      if (!lastSnapshot) {
+        alert("Snapshot not loaded yet");
+        return;
+      }
+      const md = snapshotToMarkdown(lastSnapshot);
+      try {
+        await navigator.clipboard.writeText(md);
+        if (btn) {
+          const prev = btn.textContent;
+          btn.textContent = "Copied";
+          setTimeout(() => { btn.textContent = prev; }, 1600);
+        }
+      } catch (err) {
+        // Fallback for older Android WebViews
+        const ta = document.createElement("textarea");
+        ta.value = md;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand("copy");
+          if (btn) {
+            const prev = btn.textContent;
+            btn.textContent = "Copied";
+            setTimeout(() => { btn.textContent = prev; }, 1600);
+          }
+        } catch (e2) {
+          alert("Copy failed — select manually from console or re-try");
+        }
+        document.body.removeChild(ta);
+      }
+    }
+
     async function load() {
       const res = await fetch("/api/brain-snapshot");
       const s = await res.json();
+      lastSnapshot = s;
       const liveTag = s.live ? " · LIVE" : (s.fetchError ? " · FALLBACK" : "");
       document.getElementById("stamp").textContent = (s.snapshotAt || "") + liveTag;
       document.getElementById("source").innerHTML = `
@@ -88,6 +169,8 @@
         </ul>
       `;
     }
+
+    document.getElementById("copy-brain-md").addEventListener("click", copyBrainMd);
     load().catch((err) => {
       document.getElementById("source").textContent = "Snapshot load failed: " + err.message;
     });
