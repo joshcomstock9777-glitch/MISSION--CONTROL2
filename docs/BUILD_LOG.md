@@ -1,5 +1,20 @@
 # Mission Control Build Log
 
+## 2026-09-29 — Background check-in (stand-down held)
+
+**Status**
+- Verified repo tree on `main`. A–F operator surface is already present: crew PATCH presence, mission status cycle, `/api/events` activity log, Brain snapshot page, handoff form → `data/handoffs.json`, mobile dashboard CSS/JS.
+- `docs/STAND_DOWN.md` and 2026-09-07 stand-down entry remain in force. No backlog slice implemented this run. No app files rewritten.
+- Sister systems left untouched (`studio-behind-the-cast`, `moonshadow-studio-go`). Amber/Allie not merged. No publish, spend, delete, or host connect.
+
+**Next**
+- Still waiting on Josh redesign brief before any new code.
+- Public host (Render/Fly) still needs Josh account connection.
+
+**Blocker for Josh**
+- Redesign direction, or an explicit lift of stand-down, before further slices.
+- Deploy click on Render or Fly if a public URL is wanted.
+
 ## 2026-09-07 — STAND DOWN (redesign in progress)
 
 **Status**
