@@ -11,3 +11,8 @@ Background backlog agent: stand down. Josh is redesigning the system.
 - Existing code (crew presence, mission cycle, activity log, Brain snapshot, handoff form, mobile polish, Roundtable panel, Copy Brain MD) stays as-is.
 
 Resume only on explicit instruction from Josh with a redesign brief.
+
+---
+
+**2026-10-01 — Redesign brief received.** Josh delivered the redesign direction.
+See `docs/STUDIO_BLUEPRINT.md`. Hourly "stand-down held" check-ins are no longer needed.
