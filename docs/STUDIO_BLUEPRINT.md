@@ -129,6 +129,17 @@ Concierge intro
   but it needs work on how it operates and how it gets clips out.
   Location: on Josh's Chromebook only (not on GitHub or Drive yet).
 
+## CONFLICT to resolve (logged 2026-10-01)
+
+Ivy's Crew Status Brief (2026-10-01) records a 2026-09-27 strip-down as the
+standing Herman architecture: "Herman IS the studio — no pre-built
+editor/storyboard pages; he builds each thing on request." Josh's spoken brief
+today describes pre-built pages (Writers Room, Storyboard, Editor, Finish).
+Both came from Josh. He decides which one stands, or how they combine.
+
+Also from the brief: "architecture first — nothing gets built until Joshua says
+the word. He designs the front three pages himself." No studio code until then.
+
 ## Open questions for Josh
 
 - Get Clip Factory off the Chromebook (push to GitHub or upload to Drive).
