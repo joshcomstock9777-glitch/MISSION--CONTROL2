@@ -1,0 +1,4 @@
+$ git rev-list --left-right --count HEAD...origin/ccr-4265aefb-p5nnu1
+exit: 0
+
+0	0

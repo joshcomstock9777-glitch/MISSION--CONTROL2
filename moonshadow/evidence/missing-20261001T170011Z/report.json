@@ -1,0 +1,14 @@
+{
+  "name": "missing",
+  "at": "20261001T170011Z",
+  "overall": "BLOCKED",
+  "public_deployment_verified": false,
+  "results": [
+    {
+      "check": "nope: git repo present",
+      "verdict": "BLOCKED",
+      "detail": "no git repo at /nope"
+    }
+  ],
+  "evidence_dir": "/root/moonshadow/evidence/missing-20261001T170011Z"
+}

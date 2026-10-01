@@ -1,0 +1,29 @@
+{
+  "name": "dirty-test",
+  "at": "20261001T170027Z",
+  "overall": "FAIL",
+  "public_deployment_verified": false,
+  "results": [
+    {
+      "check": "sandbox-dirty: HEAD",
+      "verdict": "PASS",
+      "detail": "5967502c38e866f1e60638a8c613377ac98d9c2f 2026-10-01 17:00:10 +0000 t init"
+    },
+    {
+      "check": "sandbox-dirty: working tree clean",
+      "verdict": "FAIL",
+      "detail": "1 dirty: ?? untracked.txt"
+    },
+    {
+      "check": "sandbox-dirty: commits pushed to remote",
+      "verdict": "BLOCKED",
+      "detail": "no upstream or origin/master ref to compare against"
+    },
+    {
+      "check": "sandbox-dirty: command 'fails'",
+      "verdict": "FAIL",
+      "detail": "exit=3; evidence=07_sandbox-dirty_cmd_fails.txt"
+    }
+  ],
+  "evidence_dir": "/root/moonshadow/evidence/dirty-test-20261001T170027Z"
+}

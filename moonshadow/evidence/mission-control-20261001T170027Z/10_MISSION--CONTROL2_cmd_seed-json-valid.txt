@@ -1,0 +1,4 @@
+$ python3 -m json.tool data/seed.json > /dev/null && python3 -m json.tool data/handoffs.json > /dev/null
+cwd: /home/user/MISSION--CONTROL2
+exit: 0
+

@@ -1,0 +1,4 @@
+$ node --check server.mjs
+cwd: /home/user/MISSION--CONTROL2
+exit: 0
+

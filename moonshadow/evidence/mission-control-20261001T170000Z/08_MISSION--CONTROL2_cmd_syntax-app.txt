@@ -1,0 +1,4 @@
+$ node --check public/app.js && node --check public/operator-extra.js
+cwd: /home/user/MISSION--CONTROL2
+exit: 0
+

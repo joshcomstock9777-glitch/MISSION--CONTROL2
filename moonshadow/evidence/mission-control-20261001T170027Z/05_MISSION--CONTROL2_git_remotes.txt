@@ -1,0 +1,5 @@
+$ git remote -v
+exit: 0
+
+origin	https://github.com/joshcomstock9777-glitch/MISSION--CONTROL2 (fetch)
+origin	https://github.com/joshcomstock9777-glitch/MISSION--CONTROL2 (push)

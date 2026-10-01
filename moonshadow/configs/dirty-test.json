@@ -1,0 +1,1 @@
+{"name":"dirty-test","repos":[{"path":"/root/moonshadow/sandbox-dirty","commands":[{"label":"fails","cmd":"exit 3"}]}]}

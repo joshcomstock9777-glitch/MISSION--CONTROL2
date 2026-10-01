@@ -1,0 +1,13 @@
+$ git log -10 --format=%h %ad %s --date=short
+exit: 0
+
+fa9ea89 2026-10-01 Log 2026-10-01 12:02 EDT stand-down check-in. No app changes.
+397dd08 2026-10-01 Log 2026-10-01 11:02 EDT stand-down check-in.
+34125af 2026-10-01 Log 2026-10-01 check-in: backlog A-F still shipped, stand-down held.
+58b125c 2026-09-30 docs: background check-in 2026-09-30 22:02 EDT (stand-down held)
+d41c9ea 2026-09-30 docs: background check-in 2026-09-30 21:02 EDT (stand-down held)
+0184aaf 2026-09-30 docs: background check-in 2026-09-30 20:02 EDT (stand-down held)
+e1a6127 2026-09-30 docs: 2026-09-30 19:02 EDT background check-in (stand-down held)
+97245a3 2026-09-30 docs: 2026-09-30 18:02 EDT stand-down check-in
+43acbd6 2026-09-30 docs: restore BUILD_LOG history after 17:02 check-in
+887c28f 2026-09-30 docs: 2026-09-30 17:02 EDT stand-down check-in

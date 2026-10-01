@@ -1,0 +1,4 @@
+$ git status --porcelain=v1
+exit: 0
+
+?? untracked.txt

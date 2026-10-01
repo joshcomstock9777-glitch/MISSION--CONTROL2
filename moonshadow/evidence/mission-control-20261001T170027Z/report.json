@@ -1,0 +1,54 @@
+{
+  "name": "mission-control",
+  "at": "20261001T170028Z",
+  "overall": "FAIL",
+  "public_deployment_verified": false,
+  "results": [
+    {
+      "check": "MISSION--CONTROL2: HEAD",
+      "verdict": "PASS",
+      "detail": "fa9ea8903977d801450c3181c8e03c664433d6ff 2026-10-01 12:05:08 -0400 josh co Log 2026-10-01 12:02 EDT stand-down check-in. No app changes."
+    },
+    {
+      "check": "MISSION--CONTROL2: working tree clean",
+      "verdict": "PASS",
+      "detail": "clean"
+    },
+    {
+      "check": "MISSION--CONTROL2: commits pushed to remote (origin/ccr-4265aefb-p5nnu1)",
+      "verdict": "PASS",
+      "detail": "ahead=0 behind=0 (as of last fetch; remote not re-fetched)"
+    },
+    {
+      "check": "MISSION--CONTROL2: command 'syntax-server'",
+      "verdict": "PASS",
+      "detail": "exit=0; evidence=08_MISSION--CONTROL2_cmd_syntax-server.txt"
+    },
+    {
+      "check": "MISSION--CONTROL2: command 'syntax-app'",
+      "verdict": "PASS",
+      "detail": "exit=0; evidence=09_MISSION--CONTROL2_cmd_syntax-app.txt"
+    },
+    {
+      "check": "MISSION--CONTROL2: command 'seed-json-valid'",
+      "verdict": "PASS",
+      "detail": "exit=0; evidence=10_MISSION--CONTROL2_cmd_seed-json-valid.txt"
+    },
+    {
+      "check": "health 'local-3030' [LOCAL_ONLY]",
+      "verdict": "FAIL",
+      "detail": "URLError: <urlopen error [Errno 111] Connection refused>; evidence=11_url_local-3030.txt"
+    },
+    {
+      "check": "health 'fly-public' [PUBLIC]",
+      "verdict": "BLOCKED",
+      "detail": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>; evidence=12_url_fly-public.txt"
+    },
+    {
+      "check": "health 'render-public' [PUBLIC]",
+      "verdict": "BLOCKED",
+      "detail": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>; evidence=13_url_render-public.txt"
+    }
+  ],
+  "evidence_dir": "/root/moonshadow/evidence/mission-control-20261001T170027Z"
+}

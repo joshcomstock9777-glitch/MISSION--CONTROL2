@@ -1,0 +1,3 @@
+GET https://moonshadow-mission-control.onrender.com/health
+scope: PUBLIC
+ERROR: URLError(OSError('Tunnel connection failed: 403 Forbidden'))

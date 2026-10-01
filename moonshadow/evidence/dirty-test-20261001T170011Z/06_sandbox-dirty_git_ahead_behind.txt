@@ -1,0 +1,5 @@
+$ git status -sb
+exit: 0
+
+## master
+?? untracked.txt

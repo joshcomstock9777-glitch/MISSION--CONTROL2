@@ -1,0 +1,37 @@
+{
+  "_status": "EXAMPLE ONLY - not activated. Copy to roundtable.config.json after Josh approves.",
+  "moderator": "josh",
+  "require_moderator_each_round": true,
+  "auto_continue_rounds": 0,
+  "limits": {
+    "max_rounds": 3,
+    "max_turns_total": 9,
+    "max_output_tokens_per_turn": 800,
+    "max_usd_per_session": 1.0,
+    "max_usd_per_day": 3.0,
+    "turn_timeout_s": 90,
+    "max_retries_per_turn": 1
+  },
+  "loop_guard": {
+    "self_repeat_similarity": 0.85,
+    "echo_overlap": 0.7,
+    "stalemate_rounds": 2
+  },
+  "seats": [
+    {"name": "claude", "provider": "anthropic", "enabled": true,
+     "model_env": "RT_CLAUDE_MODEL", "key_env": "ANTHROPIC_API_KEY",
+     "role": "Builder / analyst",
+     "price_per_1k_input": null, "price_per_1k_output": null},
+    {"name": "chatgpt", "provider": "openai", "enabled": true,
+     "model_env": "RT_OPENAI_MODEL", "key_env": "OPENAI_API_KEY",
+     "role": "Second opinion",
+     "price_per_1k_input": null, "price_per_1k_output": null},
+    {"name": "grok", "provider": "xai", "enabled": true,
+     "model_env": "RT_GROK_MODEL", "key_env": "XAI_API_KEY",
+     "role": "Contrarian",
+     "price_per_1k_input": null, "price_per_1k_output": null}
+  ],
+  "summary_seat": "claude",
+  "sessions_dir": "~/moonshadow/roundtable/sessions",
+  "spend_ledger": "~/moonshadow/roundtable/spend-ledger.jsonl"
+}

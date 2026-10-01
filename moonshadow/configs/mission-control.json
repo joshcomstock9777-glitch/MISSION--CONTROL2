@@ -1,0 +1,16 @@
+{
+  "name": "mission-control",
+  "repos": [
+    {"path": "/home/user/MISSION--CONTROL2",
+     "commands": [
+       {"label": "syntax-server", "cmd": "node --check server.mjs", "timeout": 60},
+       {"label": "syntax-app", "cmd": "node --check public/app.js && node --check public/operator-extra.js", "timeout": 60},
+       {"label": "seed-json-valid", "cmd": "python3 -m json.tool data/seed.json > /dev/null && python3 -m json.tool data/handoffs.json > /dev/null", "timeout": 60}
+     ]}
+  ],
+  "health_urls": [
+    {"label": "local-3030", "url": "http://127.0.0.1:3030/health"},
+    {"label": "fly-public", "url": "https://mission--control2.fly.dev/health"},
+    {"label": "render-public", "url": "https://moonshadow-mission-control.onrender.com/health"}
+  ]
+}

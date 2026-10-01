@@ -1,0 +1,4 @@
+$ git log -1 --format=%H %ad %an %s --date=iso
+exit: 0
+
+5967502c38e866f1e60638a8c613377ac98d9c2f 2026-10-01 17:00:10 +0000 t init

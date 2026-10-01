@@ -1,0 +1,5 @@
+GET http://127.0.0.1:3030/health
+scope: LOCAL_ONLY
+status: 200
+
+{"ok":true,"service":"moonshadow-mission-control","ts":"2026-10-01T17:00:00.698Z"}
