@@ -79,6 +79,11 @@ the script, it moves to the Storyboard.
 - Work with the Concierge (teach / do it / work with you).
 - Add things in, clip things out, add effects.
 - Plugin system for effects, extras, and similar (add and remove).
+- Tool set (Josh): mostly imaging tools — face swap, image-to-image,
+  image-to-video, and similar.
+- Existing build: `moonshadow-cutter` ("House Two", PROVEN from its README),
+  traced from `moonshadow-creative-os` (warehouse). Has the "Do it with me"
+  collaborator button already.
 
 ### Page 4 — Finish & Publish
 
@@ -101,9 +106,19 @@ Concierge intro
   → Publish / Promote
 ```
 
+## Houses and Clip Factory (Josh, 2026-10-01)
+
+- **Houses** already exist. Each house leans toward one kind of work, and that is
+  where things get built. Known: House Two = `moonshadow-cutter` (PROVEN).
+  The other houses' names and repos are UNKNOWN here.
+- **Clip Factory** turns anything the studio makes into clips. Josh: "pretty close,"
+  but it needs work on how it operates and how it gets clips out.
+  Location UNKNOWN: not found in any repo this session can see.
+
 ## Open questions for Josh
 
 - Confirm the four-page mapping above (or reassign pages).
-- Which repo holds the existing manual editor (`moonshadow-cutter`?).
+- Where Clip Factory lives (repo, site, or app).
+- The list of houses and what each leans toward.
 - The Concierge's name.
 - The outline left on the Chromebook — paste it in when available.
