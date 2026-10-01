@@ -22,7 +22,21 @@ creativity out first.
 - Other users: connect their accounts and grant permissions, then the Concierge
   walks them through the studio.
 
-## The four pages (proposed mapping of the pipeline)
+## Concierge = Herman
+
+Herman is the manager and the Concierge (Josh, 2026-10-01). Herman already
+exists as orchestrator/router in the `moonshadow-headquarters` Roundtable
+(INDICATED, per THE BOARD Work Order 05 entry).
+
+## Experience rule (Josh, 2026-10-01)
+
+Page count is not fixed (3, 4, whatever fits). The feel is what matters:
+- Never 30 pages to dig through, never stuck on one.
+- Every screen has something to do, and a sense that there is more to explore.
+- Never lost: from the opening, Herman can take you straight to any task.
+- Herman serves lessons, exercises, pointers, tips and tricks that keep refreshing.
+
+## Proposed pages (mapping of the pipeline; count is flexible)
 
 ### Page 1 — Writers Room
 
@@ -113,12 +127,10 @@ Concierge intro
   The other houses' names and repos are UNKNOWN here.
 - **Clip Factory** turns anything the studio makes into clips. Josh: "pretty close,"
   but it needs work on how it operates and how it gets clips out.
-  Location UNKNOWN: not found in any repo this session can see.
+  Location: on Josh's Chromebook only (not on GitHub or Drive yet).
 
 ## Open questions for Josh
 
-- Confirm the four-page mapping above (or reassign pages).
-- Where Clip Factory lives (repo, site, or app).
+- Get Clip Factory off the Chromebook (push to GitHub or upload to Drive).
 - The list of houses and what each leans toward.
-- The Concierge's name.
 - The outline left on the Chromebook — paste it in when available.
