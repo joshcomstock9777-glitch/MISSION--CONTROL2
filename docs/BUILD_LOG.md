@@ -1,5 +1,20 @@
 # Mission Control Build Log
 
+## 2026-10-02 21:02 EDT — Background check-in (stand-down held)
+
+**Status**
+- Verified `main` tree `5b8b422e` (22 paths). Code blobs unchanged: `server.mjs` `34ec5bd1`, `public/app.js` `e7078c50`, `public/index.html` `25c82c55`, `public/brain.html` `79670cdd`. Backlog A–F already shipped: crew presence PATCH `/api/crew/:id`, mission status cycle PATCH `/api/missions/:id`, `/api/events` activity log, Brain snapshot GET `/api/brain-snapshot` + `public/brain.html`, handoff POST `/api/handoffs` → `data/handoffs.json`, Android-oriented dashboard CSS/JS. Roundtable panel and Copy Brain MD also present. Confirmed `/api/missions/` and `/api/handoffs` in `server.mjs`.
+- `docs/STAND_DOWN.md` (2026-09-07, ordered by Josh) still in force. No unfinished A–F slice. No app files rewritten.
+- Sister systems left untouched (`studio-behind-the-cast`, `moonshadow-studio-go`). Amber/Allie not merged. No publish, spend, delete, or host connect.
+
+**Next**
+- Still waiting on Josh redesign brief before any new code.
+- Public host (Render/Fly) still needs Josh account connection.
+
+**Blocker for Josh**
+- Redesign direction, or an explicit lift of stand-down, before further slices.
+- Deploy click on Render or Fly if a public URL is wanted.
+
 ## 2026-10-02 20:02 EDT — Background check-in (stand-down held)
 
 **Status**
